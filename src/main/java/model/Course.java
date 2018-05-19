@@ -13,33 +13,27 @@ import javax.persistence.OneToMany;
 
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 
 @Setter
 @Getter
 @Entity
-@ToString
-public class User {
+public class Course {
 	
-	public static final String FIELD_COURSE = "course";
-
+	public static final String FIELD_USER = "user";
+	public static final String FIELD_TEST = "test";
+	
 	@Id
 	@GeneratedValue
-	private Integer id;
+	private Integer idUser;
 
 	@Column(nullable = false)
 	private String name;
-
-	@Column(unique = true, nullable = false)
-	private String email;
-
-	private String password;
-
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = Result.FIELD_USER)
-	private List<Result> result;
 	
-	@JoinColumn(name = FIELD_COURSE)
-	@ManyToMany(fetch = FetchType.LAZY, mappedBy = Course.FIELD_USER)
-	private List<Course> course;
+	@JoinColumn(name = FIELD_USER)
+	@ManyToMany(fetch = FetchType.LAZY, mappedBy = User.FIELD_COURSE)
+	private List<User> user;
+	
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = Test.FIELD_COURSE)
+	private List<Test> test;
 
 }

@@ -20,6 +20,7 @@ import lombok.Setter;
 public class Result {
 
 	public static final String FIELD_USER = "user";
+	public static final String FIELD_TEST = "test";
 
 	@Id
 	@GeneratedValue
@@ -31,5 +32,9 @@ public class Result {
 	@JoinColumn(name = FIELD_USER)
 	@ManyToOne(fetch = FetchType.LAZY)
 	private User user;
+	
+	@JoinColumn(name = FIELD_TEST)
+	@ManyToOne(fetch = FetchType.LAZY)
+	private Test test;
 
 }
