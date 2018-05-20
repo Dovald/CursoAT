@@ -11,6 +11,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
@@ -18,6 +19,7 @@ import lombok.ToString;
 @Getter
 @Entity
 @ToString
+@NoArgsConstructor
 public class User {
 	
 	public static final String FIELD_COURSE = "course";
@@ -37,7 +39,7 @@ public class User {
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = Result.FIELD_USER)
 	private List<Result> result;
 	
-	@ManyToMany(fetch = FetchType.LAZY)
+	@ManyToMany(fetch = FetchType.LAZY, mappedBy = Course.FIELD_USER)
 	private List<Course> course;
 
 }

@@ -12,11 +12,13 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
 @Entity
+@NoArgsConstructor
 public class Result {
 
 	public static final String FIELD_USER = "user";
@@ -36,5 +38,4 @@ public class Result {
 	@JoinColumn(name = FIELD_TEST)
 	@ManyToOne(fetch = FetchType.LAZY)
 	private Test test;
-
 }

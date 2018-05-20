@@ -8,6 +8,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
@@ -28,11 +29,17 @@ public class Test {
 	@Column(nullable = false)
 	private String name;
 	
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = Result.FIELD_TEST)
-	private List<Result> result;
-	
 	@JoinColumn(name = FIELD_COURSE)
 	@ManyToOne(fetch = FetchType.LAZY)
 	private Course course;
+	
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = Result.FIELD_TEST)
+	private List<Result> result;
+	
+	@ManyToMany(fetch = FetchType.LAZY, mappedBy = Question.FIELD_TEST)
+	private List<Question> question;
+	
+	@ManyToMany(fetch = FetchType.LAZY, mappedBy = Tag.FIELD_TEST)
+	private List<Tag> tag;
 
 }

@@ -16,21 +16,21 @@ import lombok.Setter;
 @Setter
 @Getter
 @Entity
-public class Course {
+public class Tag {
 	
-	public static final String FIELD_USER = "user";
 	public static final String FIELD_TEST = "test";
 	
 	@Id
 	@GeneratedValue
-	private Integer idUser;
+	private Integer id;
 
 	@Column(nullable = false)
 	private String name;
 	
-	@ManyToMany(fetch = FetchType.LAZY)
-	private List<User> user;
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = Question.FIELD_TAG)
+	private List<Question> question;
 	
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = Test.FIELD_COURSE)
+	@ManyToMany(fetch = FetchType.LAZY)
 	private List<Test> test;
+
 }
