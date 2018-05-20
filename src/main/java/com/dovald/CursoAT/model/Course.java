@@ -1,4 +1,4 @@
-package model;
+package com.dovald.CursoAT.model;
 
 import java.util.List;
 
@@ -7,7 +7,6 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 
@@ -29,7 +28,6 @@ public class Course {
 	@Column(nullable = false)
 	private String name;
 	
-	@JoinColumn(name = FIELD_USER)
 	@ManyToMany(fetch = FetchType.LAZY, mappedBy = User.FIELD_COURSE)
 	private List<User> user;
 	

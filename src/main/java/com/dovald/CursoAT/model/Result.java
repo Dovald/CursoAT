@@ -1,4 +1,4 @@
-package model;
+package com.dovald.CursoAT.model;
 
 import java.util.Date;
 

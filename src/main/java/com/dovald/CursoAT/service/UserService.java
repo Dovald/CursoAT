@@ -1,4 +1,4 @@
-package service;
+package com.dovald.CursoAT.service;
 
 public interface UserService {
 
