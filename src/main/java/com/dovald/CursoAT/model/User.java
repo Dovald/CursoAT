@@ -11,15 +11,11 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 
 @Setter
 @Getter
 @Entity
-@ToString
-@NoArgsConstructor
 public class User {
 	
 	public static final String FIELD_COURSE = "course";
@@ -41,5 +37,9 @@ public class User {
 	
 	@ManyToMany(fetch = FetchType.LAZY, mappedBy = Course.FIELD_USER)
 	private List<Course> course;
+	
+	public String toString() {
+		return this.getName()+","+this.getEmail();
+	}
 
 }
