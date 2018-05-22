@@ -5,7 +5,6 @@ import org.springframework.stereotype.Controller;
 
 import com.dovald.CursoAT.service.UserService;
 
-
 @Controller
 public class UserController {
 	
