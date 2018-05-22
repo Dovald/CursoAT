@@ -1,5 +1,7 @@
 package com.dovald.CursoAT.service;
 
-public interface TagService {
+import com.dovald.CursoAT.model.Tag;
+
+public interface TagService extends AbstractCRUDService<Tag, Integer> {
 
 }

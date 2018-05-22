@@ -1,5 +1,7 @@
 package com.dovald.CursoAT.service;
 
-public interface ResultService {
+import com.dovald.CursoAT.model.Result;
+
+public interface ResultService extends AbstractCRUDService<Result, Integer> {
 
 }

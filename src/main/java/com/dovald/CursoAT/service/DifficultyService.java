@@ -1,5 +1,7 @@
 package com.dovald.CursoAT.service;
 
-public interface DifficultyService {
+import com.dovald.CursoAT.model.Difficulty;
+
+public interface DifficultyService extends AbstractCRUDService<Difficulty, Integer> {
 
 }
