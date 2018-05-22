@@ -25,6 +25,8 @@ public class Result {
 	@Id
 	@GeneratedValue
 	private Integer id;
+	
+	private double number;
 
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date date;
