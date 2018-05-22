@@ -23,7 +23,7 @@ public class Course {
 	
 	@Id
 	@GeneratedValue
-	private Integer idUser;
+	private Integer id;
 
 	@Column(nullable = false)
 	private String name;
