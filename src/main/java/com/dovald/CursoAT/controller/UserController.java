@@ -48,16 +48,30 @@ public class UserController {
 		return userMapper.modelToDto(createUser);
 	}
 	
-	@RequestMapping(method = RequestMethod.PUT)
-	public void update(@RequestBody UserPostDTO dto) {
+	@RequestMapping(value = "/{id}",method = RequestMethod.PUT)
+	public void update(@PathVariable Integer id,@RequestBody UserDTO dto) {
 		final User user = userMapper.dtoToModel(dto);
+		user.setId(id);
 		userService.update(user);
 	}
 	
-	@RequestMapping(method = RequestMethod.DELETE)
-	public void delete(@RequestBody UserPostDTO dto) {
-		final User user = userMapper.dtoToModel(dto);
-		userService.delete(user);
+	@RequestMapping(value = "/{id}",method = RequestMethod.DELETE)
+	public void delete(@PathVariable Integer id) {
+		final Optional<User> user = userService.findById(id);
+		userService.delete(user.get());
 	}
+	
+//	@RequestMapping(method = RequestMethod.PUT)
+//	public void update(@RequestBody UserPostDTO dto) {
+//		final User user = userMapper.dtoToModel(dto);
+//		userService.update(user);
+//		
+//	}
+//	
+//	@RequestMapping(method = RequestMethod.DELETE)
+//	public void delete(@RequestBody UserPostDTO dto) {
+//		final User user = userMapper.dtoToModel(dto);
+//		userService.delete(user);
+//	}
 
 }

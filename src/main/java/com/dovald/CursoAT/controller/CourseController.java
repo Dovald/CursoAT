@@ -36,27 +36,28 @@ public class CourseController {
 	
 	@RequestMapping(value = "/{id}",method = RequestMethod.GET)
 	public CourseDTO findById(@PathVariable Integer id) {
-		final Optional<Course> user = courseService.findById(id);
-		return courseMapper.modelToDto(user.get());
+		final Optional<Course> course = courseService.findById(id);
+		return courseMapper.modelToDto(course.get());
 	}
 
 	@RequestMapping(method = RequestMethod.POST)
 	public CourseDTO create(@RequestBody CourseDTO dto) {
-		final Course user = courseMapper.dtoToModel(dto);
-		final Course createUser = courseService.create(user);
-		return courseMapper.modelToDto(createUser);
+		final Course course = courseMapper.dtoToModel(dto);
+		final Course createCourse = courseService.create(course);
+		return courseMapper.modelToDto(createCourse);
 	}
 	
-	@RequestMapping(method = RequestMethod.PUT)
-	public void update(@RequestBody CourseDTO dto) {
-		final Course user = courseMapper.dtoToModel(dto);
-		courseService.update(user);
+	@RequestMapping(value = "/{id}",method = RequestMethod.PUT)
+	public void update(@PathVariable Integer id,@RequestBody CourseDTO dto) {
+		final Course course = courseMapper.dtoToModel(dto);
+		course.setId(id);
+		courseService.update(course);
 	}
 	
-	@RequestMapping(method = RequestMethod.DELETE)
-	public void delete(@RequestBody CourseDTO dto) {
-		final Course user = courseMapper.dtoToModel(dto);
-		courseService.delete(user);
+	@RequestMapping(value = "/{id}",method = RequestMethod.DELETE)
+	public void delete(@PathVariable Integer id) {
+		final Optional<Course> course = courseService.findById(id);
+		courseService.delete(course.get());
 	}
 
 }
