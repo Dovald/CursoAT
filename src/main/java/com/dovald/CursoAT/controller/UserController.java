@@ -61,17 +61,15 @@ public class UserController {
 		userService.delete(user.get());
 	}
 	
-//	@RequestMapping(method = RequestMethod.PUT)
-//	public void update(@RequestBody UserPostDTO dto) {
-//		final User user = userMapper.dtoToModel(dto);
-//		userService.update(user);
-//		
-//	}
-//	
-//	@RequestMapping(method = RequestMethod.DELETE)
-//	public void delete(@RequestBody UserPostDTO dto) {
-//		final User user = userMapper.dtoToModel(dto);
-//		userService.delete(user);
-//	}
+//	@ResponseStatus(HttpStatus.NOT_FOUND)
+//	@ExceptionHandler({NotFoundException.class})
+//	public ErrorDTO notfound() {
+//		return new ErrorDTO(NotFoundException.MSG);		
+//	}	
+//	log.debug("Para el desarrollador");
+//	log.info("Informacion necesaria");
+//	log.warn("Algo que puede provocar un error");
+//	log.error("Excepciones controladas");
+//  @Slf4j
 
 }
