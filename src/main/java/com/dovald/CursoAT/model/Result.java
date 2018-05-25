@@ -2,6 +2,7 @@ package com.dovald.CursoAT.model;
 
 import java.util.Date;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -26,6 +27,7 @@ public class Result {
 	@GeneratedValue
 	private Integer id;
 	
+	@Column(nullable = false)
 	private double number;
 
 	@Temporal(TemporalType.TIMESTAMP)

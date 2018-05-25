@@ -10,6 +10,6 @@ import com.dovald.CursoAT.model.User;
 @Repository
 public interface UserDAO extends PagingAndSortingRepository<User, Integer> {
 
-	Optional<User> findOneByNameOrderByIdDesc(String name);
+	Optional<User> findOneByName(String name);
 
 }
