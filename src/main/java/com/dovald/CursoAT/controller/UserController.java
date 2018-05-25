@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.dovald.CursoAT.component.mapper.user.UserMapper;
 import com.dovald.CursoAT.dto.UserDTO;
 import com.dovald.CursoAT.dto.UserPostDTO;
+import com.dovald.CursoAT.exception.NotFoundException;
 import com.dovald.CursoAT.model.User;
 import com.dovald.CursoAT.service.UserService;
 
@@ -36,8 +37,9 @@ public class UserController {
 	}
 	
 	@RequestMapping(value = "/{id}",method = RequestMethod.GET)
-	public UserDTO findById(@PathVariable Integer id) {
+	public UserDTO findById(@PathVariable Integer id) throws NotFoundException{
 		final Optional<User> user = userService.findById(id);
+		if(!user.isPresent()) throw new NotFoundException();
 		return userMapper.modelToDto(user.get());
 	}
 
@@ -49,15 +51,20 @@ public class UserController {
 	}
 	
 	@RequestMapping(value = "/{id}",method = RequestMethod.PUT)
-	public void update(@PathVariable Integer id,@RequestBody UserDTO dto) {
-		final User user = userMapper.dtoToModel(dto);
-		user.setId(id);
-		userService.update(user);
+	public void update(@PathVariable Integer id,@RequestBody UserDTO dto) throws NotFoundException {
+		final Optional<User> user = userService.findById(id);
+		if(!user.isPresent()) throw new NotFoundException();
+		final User user1 = userMapper.dtoToModel(dto);
+		user.get().setName(user1.getName());
+		user.get().setEmail(user1.getEmail());
+		user.get().setPassword(user1.getPassword());
+		userService.update(user.get());
 	}
 	
 	@RequestMapping(value = "/{id}",method = RequestMethod.DELETE)
-	public void delete(@PathVariable Integer id) {
+	public void delete(@PathVariable Integer id) throws NotFoundException {
 		final Optional<User> user = userService.findById(id);
+		if(!user.isPresent()) throw new NotFoundException();
 		userService.delete(user.get());
 	}
 	
