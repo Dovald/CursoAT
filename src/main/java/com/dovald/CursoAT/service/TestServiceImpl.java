@@ -43,4 +43,9 @@ public class TestServiceImpl implements TestService{
 		testdao.delete(t);
 	}
 
+	@Override
+	public Optional<Test> findOneByName(String name) {
+		return testdao.findOneByName(name);
+	}
+
 }
