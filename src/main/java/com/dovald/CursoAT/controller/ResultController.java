@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.dovald.CursoAT.component.mapper.result.ResultMapper;
 import com.dovald.CursoAT.dto.ResultDTO;
-import com.dovald.CursoAT.exception.DuplicatedKeyException;
 import com.dovald.CursoAT.exception.NotFoundException;
 import com.dovald.CursoAT.model.Result;
 import com.dovald.CursoAT.service.ResultService;
@@ -44,7 +43,7 @@ public class ResultController {
 	}
 
 	@RequestMapping(method = RequestMethod.POST)
-	public ResultDTO create(@RequestBody ResultDTO dto) throws DuplicatedKeyException {
+	public ResultDTO create(@RequestBody ResultDTO dto) {
 		final Result result = resultMapper.dtoToModel(dto);
 		final Result createResult = resultService.create(result);
 		return resultMapper.modelToDto(createResult);
