@@ -37,6 +37,11 @@ public class UserServiceImpl implements UserService{
 	public Set<User> findAll(Pageable p) {
 		return userdao.findAll(PageRequest.of(p.getPageNumber(), p.getPageSize())).stream().collect(Collectors.toSet());
 	}
+	
+	@Override
+	public Optional<User> findOneByName(String name) {
+		return userdao.findOneByName(name);
+	}
 
 	@Override
 	public void delete(User t) {

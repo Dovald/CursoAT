@@ -53,10 +53,11 @@ public class TestController {
 	}
 	
 	@RequestMapping(value = "/{id}",method = RequestMethod.PUT)
-	public void update(@PathVariable Integer id,@RequestBody TestDTO dto) throws NotFoundException {
+	public void update(@PathVariable Integer id,@RequestBody TestDTO dto) throws NotFoundException, DuplicatedKeyException {
 		final Optional<Test> test = testService.findById(id);
 		if(!test.isPresent()) throw new NotFoundException();
 		final Test test1 = testMapper.dtoToModel(dto);
+		if(test1.getName() == test.get().getName()) throw new DuplicatedKeyException();
 		test.get().setName(test1.getName());
 		testService.update(test.get());
 	}
