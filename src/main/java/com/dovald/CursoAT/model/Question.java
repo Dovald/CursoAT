@@ -11,6 +11,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.validation.constraints.Size;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -39,6 +40,7 @@ public class Question {
 	private Tag tag;
 	
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = Answer.FIELD_QUESTION)
+	@Size(min=0,max=4)
 	private List<Answer> answer;
 	
 	@JoinColumn(name = FIELD_DIFFICULTY)
