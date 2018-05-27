@@ -37,6 +37,11 @@ public class TagServiceImpl implements TagService{
 	public Set<Tag> findAll(Pageable p) {
 		return tagdao.findAll(PageRequest.of(p.getPageNumber(), p.getPageSize())).stream().collect(Collectors.toSet());
 	}
+	
+	@Override
+	public Optional<Tag> findOneByName(String name) {
+		return tagdao.findOneByName(name);
+	}
 
 	@Override
 	public void delete(Tag t) {
