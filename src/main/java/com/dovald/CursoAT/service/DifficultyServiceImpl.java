@@ -43,4 +43,9 @@ public class DifficultyServiceImpl implements DifficultyService {
 		difficultydao.delete(t);
 	}
 
+	@Override
+	public Optional<Difficulty> findOneByName(String name) {
+		return difficultydao.findOneByName(name);
+	}
+
 }
