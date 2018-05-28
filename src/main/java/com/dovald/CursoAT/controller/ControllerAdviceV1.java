@@ -21,7 +21,7 @@ public class ControllerAdviceV1 {
 	@ExceptionHandler(DuplicatedKeyException.class)
 	public ResponseEntity<ErrorDTO> error(DuplicatedKeyException e)
 	{
-		return new ResponseEntity<ErrorDTO>(new ErrorDTO(e.getMessage()),HttpStatus.PRECONDITION_FAILED);
+		return new ResponseEntity<ErrorDTO>(new ErrorDTO(e.getMessage()),HttpStatus.BAD_REQUEST);
 	}
 
 }
