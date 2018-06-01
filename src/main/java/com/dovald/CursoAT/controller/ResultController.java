@@ -54,7 +54,7 @@ public class ResultController {
 		final Optional<Result> result = resultService.findById(id);
 		if(!result.isPresent()) throw new NotFoundException();
 		final Result result1 = resultMapper.dtoToModel(dto);
-		result.get().setNumber(result1.getNumber());
+		result.get().setScore(result1.getScore());
 		resultService.update(result.get());
 	}
 	

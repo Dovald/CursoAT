@@ -29,15 +29,6 @@ public class Result {
 	
 	@Column(nullable = false)
 	private Integer score;
-	
-	@Column(nullable = false)
-	private String question;
-	
-	@Column(nullable = false)
-	private String answer;
-	
-	@Column(nullable = false)
-	private boolean isCorrect;
 
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date date;
