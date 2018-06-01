@@ -1,5 +1,6 @@
 package com.dovald.CursoAT.service;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -17,6 +18,9 @@ public class AnswerServiceImpl implements AnswerService {
 	
 	@Autowired
 	AnswerDAO answerdao;
+	
+	@Autowired
+	QuestionService questionservice;
 
 	@Override
 	public Answer create(Answer t) {
@@ -41,6 +45,16 @@ public class AnswerServiceImpl implements AnswerService {
 	@Override
 	public void delete(Answer t) {
 		answerdao.delete(t);		
+	}
+
+	@Override
+	public List<Answer> findByQuestion(Integer idQuestion) {
+		return answerdao.findByQuestion(questionservice.findById(idQuestion).get());
+	}
+
+	@Override
+	public Optional<Answer> findOneByIsCorrect(boolean b) {
+		return answerdao.findOneByIsCorrect(b);
 	}
 
 }
