@@ -6,7 +6,6 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -25,11 +24,20 @@ public class Result {
 	public static final String FIELD_TEST = "test";
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@GeneratedValue
 	private Integer id;
 	
 	@Column(nullable = false)
-	private double number;
+	private Integer score;
+	
+	@Column(nullable = false)
+	private String question;
+	
+	@Column(nullable = false)
+	private String answer;
+	
+	@Column(nullable = false)
+	private boolean isCorrect;
 
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date date;
