@@ -7,7 +7,9 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import com.dovald.CursoAT.dto.ErrorDTO;
 import com.dovald.CursoAT.exception.DuplicatedKeyException;
+import com.dovald.CursoAT.exception.MaxNumberException;
 import com.dovald.CursoAT.exception.NotFoundException;
+import com.dovald.CursoAT.exception.TrueException;
 
 @ControllerAdvice(basePackages = {"com.dovald.CursoAT.controller"})
 public class ControllerAdviceV1 {
@@ -20,6 +22,18 @@ public class ControllerAdviceV1 {
 	
 	@ExceptionHandler(DuplicatedKeyException.class)
 	public ResponseEntity<ErrorDTO> error(DuplicatedKeyException e)
+	{
+		return new ResponseEntity<ErrorDTO>(new ErrorDTO(e.getMessage()),HttpStatus.BAD_REQUEST);
+	}
+	
+	@ExceptionHandler(MaxNumberException.class)
+	public ResponseEntity<ErrorDTO> error(MaxNumberException e)
+	{
+		return new ResponseEntity<ErrorDTO>(new ErrorDTO(e.getMessage()),HttpStatus.BAD_REQUEST);
+	}
+	
+	@ExceptionHandler(TrueException.class)
+	public ResponseEntity<ErrorDTO> error(TrueException e)
 	{
 		return new ResponseEntity<ErrorDTO>(new ErrorDTO(e.getMessage()),HttpStatus.BAD_REQUEST);
 	}
