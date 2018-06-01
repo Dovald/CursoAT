@@ -1,6 +1,7 @@
 package com.dovald.CursoAT.component.mapper.user;
 
 import org.dozer.DozerBeanMapper;
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -11,7 +12,6 @@ import org.mockito.junit.MockitoJUnitRunner;
 import com.dovald.CursoAT.dto.UserDTO;
 import com.dovald.CursoAT.model.User;
 
-import junit.framework.Assert;
 
 @RunWith(MockitoJUnitRunner.class)
 public class TestUserMapper {
@@ -31,9 +31,9 @@ public class TestUserMapper {
 		final User user = new User();
 		final UserDTO userDTO = new UserDTO();
 		userDTO.setName("Pepe");
-		Mockito.when(dozer.map(new UserDTO(), User.class)).thenReturn(user);		
+		Mockito.when(dozer.map(userDTO, User.class)).thenReturn(user);		
 		final User res = mapper.dtoToModel(userDTO);
-		Assert.assertEquals("Pepe", res.getName());		
+		Assert.assertEquals(res, user);		
 	}
 
 }
