@@ -7,7 +7,7 @@ import com.dovald.CursoAT.model.Answers_by_User;
 
 public interface Answers_by_UserMapper {
 	
-	public  Answers_by_User dtoToModel(Integer idTest, Integer idUser, Answers_by_UserDTO dto);
-	public  List<Answers_by_User> dtoToModel(Integer idTest, Integer idUser, List<Answers_by_UserDTO> dtos);
+	public  Answers_by_User dtoToModel(Answers_by_UserDTO dto);
+	public  List<Answers_by_User> dtoToModel(List<Answers_by_UserDTO> dtos);
 
 }

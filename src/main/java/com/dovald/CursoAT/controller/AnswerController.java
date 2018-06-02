@@ -48,7 +48,7 @@ public class AnswerController {
 		dto.setIdQuestion(idQuestion);
 		if(dto.getText() == null) throw new EmptyFieldException();
 		if(answerService.findByQuestion(idQuestion).size() == 4) throw new MaxNumberException();
-		if(answerService.findOneByIsCorrect(true).isPresent() && dto.isCorrect) throw new QuestionTrueException();
+		//if(answerService.findOneByIsCorrect(true).isPresent() && dto.isCorrect) throw new QuestionTrueException();
 		final Answer answer = answerMapper.dtoToModel(dto);
 		final Answer createAnswer = answerService.create(answer);
 		return answerMapper.modelToDto(createAnswer);
@@ -59,7 +59,7 @@ public class AnswerController {
 		dto.setIdQuestion(idQuestion);
 		final Optional<Answer> answer = answerService.findById(id);
 		if(!answer.isPresent()) throw new NotFoundException();
-		if(answerService.findOneByIsCorrect(true).isPresent() && dto.isCorrect) throw new QuestionTrueException();
+		//if(answerService.findOneByIsCorrect(true).isPresent() && dto.isCorrect) throw new QuestionTrueException();
 		final Answer answer1 = answerMapper.dtoToModel(dto);
 		if(answer1.getText() != null) answer.get().setText(answer1.getText());
 		if(answer1.isCorrect() != answer.get().isCorrect()) answer.get().setCorrect(answer1.isCorrect());

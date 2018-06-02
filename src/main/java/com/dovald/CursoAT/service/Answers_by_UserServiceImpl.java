@@ -53,7 +53,7 @@ public class Answers_by_UserServiceImpl implements Answers_by_UserService {
 
 	@Override
 	public void delete(Answers_by_User t) {
-		answers_by_userdao.delete(t);		
+		answers_by_userdao.delete(t);
 	}
 
 	@Override
