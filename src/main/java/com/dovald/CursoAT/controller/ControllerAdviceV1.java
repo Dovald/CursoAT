@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import com.dovald.CursoAT.dto.ErrorDTO;
 import com.dovald.CursoAT.exception.DuplicatedKeyException;
+import com.dovald.CursoAT.exception.EmptyFieldException;
 import com.dovald.CursoAT.exception.MaxNumberException;
 import com.dovald.CursoAT.exception.NotFoundException;
 import com.dovald.CursoAT.exception.TrueException;
@@ -34,6 +35,12 @@ public class ControllerAdviceV1 {
 	
 	@ExceptionHandler(TrueException.class)
 	public ResponseEntity<ErrorDTO> error(TrueException e)
+	{
+		return new ResponseEntity<ErrorDTO>(new ErrorDTO(e.getMessage()),HttpStatus.BAD_REQUEST);
+	}
+	
+	@ExceptionHandler(EmptyFieldException.class)
+	public ResponseEntity<ErrorDTO> error(EmptyFieldException e)
 	{
 		return new ResponseEntity<ErrorDTO>(new ErrorDTO(e.getMessage()),HttpStatus.BAD_REQUEST);
 	}
