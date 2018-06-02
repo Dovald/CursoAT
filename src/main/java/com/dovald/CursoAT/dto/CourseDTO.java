@@ -12,6 +12,6 @@ public class CourseDTO {
 	private String name;
 	private Date start_date;
 	private Date end_date;
-	private List<Integer> user;
+	private List<UserDTO> user;
 
 }

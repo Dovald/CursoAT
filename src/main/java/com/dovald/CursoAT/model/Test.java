@@ -26,7 +26,7 @@ public class Test {
 	@GeneratedValue
 	private Integer id;
 
-	@Column(unique = true,nullable = false)
+	@Column(nullable = false)
 	private String name;
 	
 	@JoinColumn(name = FIELD_COURSE)

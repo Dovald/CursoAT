@@ -21,7 +21,7 @@ public class Difficulty {
 	@GeneratedValue
 	private Integer id;
 
-	@Column(nullable = false)
+	@Column(unique = true,nullable = false)
 	private String name;
 	
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = Question.FIELD_DIFFICULTY)

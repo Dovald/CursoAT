@@ -1,7 +1,7 @@
 package com.dovald.CursoAT.service;
 
+import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,8 +34,8 @@ public class UserServiceImpl implements UserService{
 	}
 
 	@Override
-	public Set<User> findAll(Pageable p) {
-		return userdao.findAll(PageRequest.of(p.getPageNumber(), p.getPageSize())).stream().collect(Collectors.toSet());
+	public List<User> findAll(Pageable p) {
+		return userdao.findAll(PageRequest.of(p.getPageNumber(), p.getPageSize())).stream().collect(Collectors.toList());
 	}
 	
 	@Override
@@ -46,6 +46,11 @@ public class UserServiceImpl implements UserService{
 	@Override
 	public void delete(User t) {
 		userdao.delete(t);		
+	}
+
+	@Override
+	public Optional<User> findOneByEmail(String name) {
+		return userdao.findOneByEmail(name);
 	}
 
 }

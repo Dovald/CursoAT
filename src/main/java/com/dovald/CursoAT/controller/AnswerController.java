@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.dovald.CursoAT.component.mapper.answer.AnswerMapper;
 import com.dovald.CursoAT.dto.AnswerDTO;
 import com.dovald.CursoAT.dto.AnswerPostDTO;
+import com.dovald.CursoAT.exception.EmptyFieldException;
 import com.dovald.CursoAT.exception.MaxNumberException;
 import com.dovald.CursoAT.exception.NotFoundException;
 import com.dovald.CursoAT.exception.TrueException;
@@ -34,10 +35,18 @@ public class AnswerController {
 		final List<Answer> answers = answerService.findByQuestion(idQuestion);
 		return answerMapper.modelToDto(answers);
 	}
+	
+	@RequestMapping(value = "/{id}",method = RequestMethod.GET)
+	public AnswerDTO findById(@PathVariable Integer id) throws NotFoundException {
+		final Optional<Answer> answer = answerService.findById(id);
+		if(!answer.isPresent()) throw new NotFoundException();
+		return answerMapper.modelToDto(answer.get());
+	}
 
 	@RequestMapping(method = RequestMethod.POST)
-	public AnswerDTO create(@PathVariable Integer idQuestion,@RequestBody AnswerPostDTO dto) throws MaxNumberException, TrueException{
+	public AnswerDTO create(@PathVariable Integer idQuestion,@RequestBody AnswerPostDTO dto) throws MaxNumberException, TrueException, EmptyFieldException{
 		dto.setIdQuestion(idQuestion);
+		if(dto.getText() == null) throw new EmptyFieldException();
 		if(answerService.findByQuestion(idQuestion).size() == 4) throw new MaxNumberException();
 		if(answerService.findOneByIsCorrect(true).isPresent() && dto.isCorrect) throw new TrueException();
 		final Answer answer = answerMapper.dtoToModel(dto);
@@ -46,11 +55,14 @@ public class AnswerController {
 	}
 	
 	@RequestMapping(value = "/{id}",method = RequestMethod.PUT)
-	public void update(@PathVariable Integer id,@RequestBody AnswerDTO dto) throws NotFoundException {
+	public void update(@PathVariable Integer idQuestion,@PathVariable Integer id,@RequestBody AnswerPostDTO dto) throws NotFoundException, TrueException {
+		dto.setIdQuestion(idQuestion);
 		final Optional<Answer> answer = answerService.findById(id);
 		if(!answer.isPresent()) throw new NotFoundException();
+		if(answerService.findOneByIsCorrect(true).isPresent() && dto.isCorrect) throw new TrueException();
 		final Answer answer1 = answerMapper.dtoToModel(dto);
-		answer.get().setText(answer1.getText());
+		if(answer1.getText() != null) answer.get().setText(answer1.getText());
+		if(answer1.isCorrect() != answer.get().isCorrect()) answer.get().setCorrect(answer1.isCorrect());
 		answerService.update(answer.get());
 	}
 	

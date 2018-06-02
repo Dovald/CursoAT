@@ -7,5 +7,6 @@ import com.dovald.CursoAT.model.User;
 public interface UserService extends AbstractCRUDService<User, Integer> {
 	
 	Optional<User> findOneByName(String name);
+	Optional<User> findOneByEmail(String name);
 
 }

@@ -31,10 +31,10 @@ public class Course {
 	@Column(nullable = false)
 	private String name;
 	
-	@Temporal(TemporalType.TIMESTAMP)
+	@Temporal(TemporalType.DATE)
 	private Date start_date;
 	
-	@Temporal(TemporalType.TIMESTAMP)
+	@Temporal(TemporalType.DATE)
 	private Date end_date;
 	
 	@ManyToMany(fetch = FetchType.LAZY)
