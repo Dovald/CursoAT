@@ -38,8 +38,5 @@ public class Test {
 	
 	@ManyToMany(fetch = FetchType.LAZY, mappedBy = Question.FIELD_TEST)
 	private List<Question> question;
-	
-	@ManyToMany(fetch = FetchType.LAZY, mappedBy = Tag.FIELD_TEST)
-	private List<Tag> tag;
 
 }

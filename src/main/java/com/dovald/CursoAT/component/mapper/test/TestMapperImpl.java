@@ -32,7 +32,6 @@ public class TestMapperImpl implements TestMapper {
 	public Test dtoToModel(TestPostDTO dto) {
 		Test model = new Test();
 		model.setName(dto.getName());
-		model.setTag(tagMapper.dtoToModel(dto.getTag()));
 		model.setCourse(courseService.findById(dto.getCourse().getId()).get());
 		return model;
 	}
@@ -42,6 +41,7 @@ public class TestMapperImpl implements TestMapper {
 		TestDTO dto = new TestDTO();
 		dto.setId(model.getId());
 		dto.setName(model.getName());
+		dto.setCourse(model.getCourse().getName());
 		return dto;
 	}
 
