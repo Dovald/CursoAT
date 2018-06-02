@@ -1,5 +1,6 @@
 package com.dovald.CursoAT.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -48,7 +49,23 @@ public class ResultServiceImpl implements ResultService {
 
 	@Override
 	public List<Result> findByTest(Integer idTest, Pageable p) {
-		return resultdao.findByTest(testService.findById(idTest).get(),PageRequest.of(p.getPageNumber(), p.getPageSize())).stream().collect(Collectors.toList());
+		List<Result> results = new ArrayList<Result>();
+		findAll(p).forEach(m -> {if(m.getTest().getId() == idTest) results.add(m);});
+		return results;
+	}
+
+	@Override
+	public List<Result> findByUser(Integer idUser, Pageable p) {
+		List<Result> results = new ArrayList<Result>();
+		findAll(p).forEach(m -> {if(m.getUser().getId() == idUser) results.add(m);});
+		return results;
+	}
+
+	@Override
+	public List<Result> findByCourse(Integer idCourse, Pageable p) {
+		List<Result> results = new ArrayList<Result>();
+		findAll(p).forEach(m -> {if(m.getTest().getCourse().getId() == idCourse) results.add(m);});
+		return results;
 	}
 
 }

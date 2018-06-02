@@ -7,7 +7,6 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -31,11 +30,15 @@ public class ResultController {
 	
 	@RequestMapping(method = RequestMethod.GET)
 	public List<ResultDTO> findAll(@RequestParam(required = false) Integer idTest,
+			@RequestParam(required = false) Integer idUser,
+			@RequestParam(required = false) Integer idCourse,
 			@RequestParam(defaultValue = "0", required = false) Integer page,
 			@RequestParam(defaultValue = "10", required = false) Integer size) {
 		List<Result> results = new ArrayList<Result>();
-		if(idTest == null) {results = resultService.findAll(PageRequest.of(page, size));}
 		if(idTest != null) {results = resultService.findByTest(idTest,PageRequest.of(page, size));}
+		if(idUser != null) {results = resultService.findByUser(idUser,PageRequest.of(page, size));}
+		if(idCourse != null) {results = resultService.findByCourse(idCourse,PageRequest.of(page, size));}
+		if(idTest == null && idUser == null && idCourse == null) {results = resultService.findAll(PageRequest.of(page, size));}
 		return resultMapper.modelToDto(results);
 	}
 	
@@ -44,22 +47,6 @@ public class ResultController {
 		final Optional<Result> result = resultService.findById(id);
 		if(!result.isPresent()) throw new NotFoundException();
 		return resultMapper.modelToDto(result.get());
-	}
-
-	@RequestMapping(method = RequestMethod.POST)
-	public ResultDTO create(@RequestBody ResultDTO dto) {
-		final Result result = resultMapper.dtoToModel(dto);
-		final Result createResult = resultService.create(result);
-		return resultMapper.modelToDto(createResult);
-	}
-	
-	@RequestMapping(value = "/{id}",method = RequestMethod.PUT)
-	public void update(@PathVariable Integer id,@RequestBody ResultDTO dto) throws NotFoundException {
-		final Optional<Result> result = resultService.findById(id);
-		if(!result.isPresent()) throw new NotFoundException();
-		final Result result1 = resultMapper.dtoToModel(dto);
-		result.get().setScore(result1.getScore());
-		resultService.update(result.get());
 	}
 	
 	@RequestMapping(value = "/{id}",method = RequestMethod.DELETE)
