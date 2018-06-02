@@ -7,10 +7,10 @@ import lombok.Data;
 @Data
 public class QuestionDTO {
 	
-	private Integer id;	
+	private Integer id;
 	private String text;
-	private String tag;
-	private String difficulty;	
+	private TagDTO tag;
+	private DifficultyDTO difficulty;	
 	private List<AnswerDTO> answer;
 
 }

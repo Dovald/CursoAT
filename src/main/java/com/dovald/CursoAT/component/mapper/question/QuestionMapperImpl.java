@@ -7,39 +7,58 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.dovald.CursoAT.component.mapper.answer.AnswerMapper;
+import com.dovald.CursoAT.component.mapper.difficulty.DifficultyMapper;
+import com.dovald.CursoAT.component.mapper.tag.TagMapper;
 import com.dovald.CursoAT.dto.QuestionDTO;
+import com.dovald.CursoAT.dto.QuestionPostDTO;
 import com.dovald.CursoAT.model.Question;
-import com.dovald.CursoAT.service.DifficultyService;
-import com.dovald.CursoAT.service.TagService;
 
 @Component
 public class QuestionMapperImpl  implements QuestionMapper {
-
-	@Autowired
-	TagService tagService;
 	
 	@Autowired
-	DifficultyService difficultyService;
+	AnswerMapper answerMapper;
 	
 	@Autowired
-	AnswerMapper mapper;
+	TagMapper tagMapper;
+	
+	@Autowired
+	DifficultyMapper difficultyMapper;
 	
 	public Question dtoToModel(QuestionDTO dto) {
 		Question model = new Question();
-		model.setTag(tagService.findOneByName(dto.getTag()).get());
-		model.setDifficulty(difficultyService.findOneByName(dto.getDifficulty()).get());
+		model.setTag(tagMapper.dtoToModel(dto.getTag()));
+		model.setDifficulty(difficultyMapper.dtoToModel(dto.getDifficulty()));
 		model.setText(dto.getText());
-		model.setAnswer(mapper.dtoToModel(dto.getAnswer()));
+		model.setAnswer(answerMapper.dtoToModel(dto.getAnswer()));
+		return model;
+	}
+	
+	@Override
+	public Question dtoToModel(QuestionPostDTO dto) {
+		Question model = new Question();
+		model.setTag(tagMapper.dtoToModel(dto.getTag()));
+		model.setDifficulty(difficultyMapper.dtoToModel(dto.getDifficulty()));
+		model.setText(dto.getText());
 		return model;
 	}
 	
 	public QuestionDTO modelToDto(Question model) {
 		QuestionDTO dto = new QuestionDTO();
 		dto.setId(model.getId());
-		dto.setTag(model.getTag().getName());
-		dto.setDifficulty(model.getDifficulty().getName());
+		dto.setTag(tagMapper.modelToDto(model.getTag()));
+		dto.setDifficulty(difficultyMapper.modelToDto(model.getDifficulty()));
 		dto.setText(model.getText());
-		dto.setAnswer(mapper.modelToDto(model.getAnswer()));
+		dto.setAnswer(answerMapper.modelToDto(model.getAnswer()));
+		return dto;		
+	}
+	
+	public QuestionPostDTO modelToDtoPost(Question model) {
+		QuestionPostDTO dto = new QuestionPostDTO();
+		dto.setId(model.getId());
+		dto.setTag(tagMapper.modelToDto(model.getTag()));
+		dto.setDifficulty(difficultyMapper.modelToDto(model.getDifficulty()));
+		dto.setText(model.getText());
 		return dto;		
 	}
 	
