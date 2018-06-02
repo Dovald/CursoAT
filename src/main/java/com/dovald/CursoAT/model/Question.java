@@ -31,7 +31,7 @@ public class Question {
 	@Column(nullable = false)
 	private String text;
 	
-	@ManyToMany(fetch = FetchType.LAZY)
+	@ManyToMany(fetch = FetchType.LAZY, mappedBy = Test.FIELD_QUESTION)
 	private List<Test> test;
 	
 	@JoinColumn(name = FIELD_TAG)

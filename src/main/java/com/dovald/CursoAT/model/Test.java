@@ -21,6 +21,7 @@ import lombok.Setter;
 public class Test {
 	
 	public static final String FIELD_COURSE = "course";
+	public static final String FIELD_QUESTION = "question";
 	
 	@Id
 	@GeneratedValue
@@ -36,7 +37,7 @@ public class Test {
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = Result.FIELD_TEST)
 	private List<Result> result;
 	
-	@ManyToMany(fetch = FetchType.LAZY, mappedBy = Question.FIELD_TEST)
+	@ManyToMany(fetch = FetchType.LAZY)
 	private List<Question> question;
 
 }

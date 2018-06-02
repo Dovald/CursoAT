@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.dovald.CursoAT.component.mapper.test.TestMapper;
 import com.dovald.CursoAT.dto.TestDTO;
 import com.dovald.CursoAT.dto.TestPostDTO;
+import com.dovald.CursoAT.dto.TestPutDTO;
+import com.dovald.CursoAT.exception.EmptyFieldException;
 import com.dovald.CursoAT.exception.NotFoundException;
 import com.dovald.CursoAT.model.Test;
 import com.dovald.CursoAT.service.TestService;
@@ -48,18 +50,21 @@ public class TestController {
 	}
 
 	@RequestMapping(method = RequestMethod.POST)
-	public TestDTO create(@RequestBody TestPostDTO dto) {
+	public TestDTO create(@RequestBody TestPostDTO dto) throws EmptyFieldException {
+		if(dto.getName() == null) throw new EmptyFieldException();
 		final Test test = testMapper.dtoToModel(dto);
 		final Test createTest = testService.create(test);
 		return testMapper.modelToDto(createTest);
 	}
 	
 	@RequestMapping(value = "/{id}",method = RequestMethod.PUT)
-	public void update(@PathVariable Integer id,@RequestBody TestPostDTO dto) throws NotFoundException {
+	public void update(@PathVariable Integer id,@RequestBody TestPutDTO dto) throws NotFoundException {
 		final Optional<Test> test = testService.findById(id);
 		if(!test.isPresent()) throw new NotFoundException();
 		final Test test1 = testMapper.dtoToModel(dto);
-		test.get().setName(test1.getName());
+		if(test1.getName() != null) test.get().setName(test1.getName());
+		if(test1.getCourse() != null) test.get().setCourse(test1.getCourse());
+		if(!test1.getQuestion().isEmpty()) test.get().getQuestion().addAll(test1.getQuestion());
 		testService.update(test.get());
 	}
 	
