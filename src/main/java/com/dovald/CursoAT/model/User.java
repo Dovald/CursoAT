@@ -30,8 +30,6 @@ public class User {
 	@Column(unique = true, nullable = false)
 	private String email;
 
-	private String password;
-
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = Result.FIELD_USER)
 	private List<Result> result;
 	
