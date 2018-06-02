@@ -1,7 +1,7 @@
 package com.dovald.CursoAT.controller;
 
+import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.dovald.CursoAT.component.mapper.difficulty.DifficultyMapper;
 import com.dovald.CursoAT.dto.DifficultyDTO;
 import com.dovald.CursoAT.exception.DuplicatedKeyException;
+import com.dovald.CursoAT.exception.EmptyFieldException;
 import com.dovald.CursoAT.exception.NotFoundException;
 import com.dovald.CursoAT.model.Difficulty;
 import com.dovald.CursoAT.service.DifficultyService;
@@ -30,9 +31,9 @@ public class DifficultyController {
 	DifficultyMapper difficultyMapper;
 	
 	@RequestMapping(method = RequestMethod.GET)
-	public Set<DifficultyDTO> findAll(@RequestParam(defaultValue = "0", required = false) Integer page,
+	public List<DifficultyDTO> findAll(@RequestParam(defaultValue = "0", required = false) Integer page,
 			@RequestParam(defaultValue = "10", required = false) Integer size) {
-		final Set<Difficulty> difficulties = difficultyService.findAll(PageRequest.of(page, size));
+		final List<Difficulty> difficulties = difficultyService.findAll(PageRequest.of(page, size));
 		return difficultyMapper.modelToDto(difficulties);
 	}
 	
@@ -44,7 +45,8 @@ public class DifficultyController {
 	}
 
 	@RequestMapping(method = RequestMethod.POST)
-	public DifficultyDTO create(@RequestBody DifficultyDTO dto) throws DuplicatedKeyException {
+	public DifficultyDTO create(@RequestBody DifficultyDTO dto) throws DuplicatedKeyException, EmptyFieldException {
+		if(dto.getName() == null) throw new EmptyFieldException();
 		final Difficulty difficulty = difficultyMapper.dtoToModel(dto);
 		final Optional<Difficulty> difficulty1 = difficultyService.findOneByName(difficulty.getName());
 		if(difficulty1.isPresent()) throw new DuplicatedKeyException();
@@ -56,9 +58,10 @@ public class DifficultyController {
 	public void update(@PathVariable Integer id,@RequestBody DifficultyDTO dto) throws NotFoundException, DuplicatedKeyException {
 		final Optional<Difficulty> difficulty = difficultyService.findById(id);
 		if(!difficulty.isPresent()) throw new NotFoundException();
-		final Difficulty difficulty1 = difficultyMapper.dtoToModel(dto);
-		if(difficulty1.getName() == difficulty.get().getName()) throw new DuplicatedKeyException();
-		difficulty.get().setName(difficulty1.getName());
+		final Optional<Difficulty> difficulty1 = difficultyService.findOneByName(dto.getName());
+		if(difficulty1.isPresent()) throw new DuplicatedKeyException();		
+		final Difficulty difficulty2 = difficultyMapper.dtoToModel(dto);
+		if (difficulty2.getName() != null) difficulty.get().setName(difficulty2.getName());
 		difficultyService.update(difficulty.get());
 	}
 	

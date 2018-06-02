@@ -1,7 +1,7 @@
 package com.dovald.CursoAT.service;
 
+import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,8 +34,8 @@ public class Answers_by_UserServiceImpl implements Answers_by_UserService {
 	}
 
 	@Override
-	public Set<Answers_by_User> findAll(Pageable p) {
-		return answers_by_userdao.findAll(PageRequest.of(p.getPageNumber(), p.getPageSize())).stream().collect(Collectors.toSet());
+	public List<Answers_by_User> findAll(Pageable p) {
+		return answers_by_userdao.findAll(PageRequest.of(p.getPageNumber(), p.getPageSize())).stream().collect(Collectors.toList());
 	}
 
 	@Override

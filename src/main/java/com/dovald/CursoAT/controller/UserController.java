@@ -1,7 +1,7 @@
 package com.dovald.CursoAT.controller;
 
+import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -14,7 +14,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.dovald.CursoAT.component.mapper.user.UserMapper;
 import com.dovald.CursoAT.dto.UserDTO;
-import com.dovald.CursoAT.dto.UserPostDTO;
+import com.dovald.CursoAT.exception.DuplicatedKeyException;
+import com.dovald.CursoAT.exception.EmptyFieldException;
 import com.dovald.CursoAT.exception.NotFoundException;
 import com.dovald.CursoAT.model.User;
 import com.dovald.CursoAT.service.UserService;
@@ -30,9 +31,9 @@ public class UserController {
 	UserMapper userMapper;
 
 	@RequestMapping(method = RequestMethod.GET)
-	public Set<UserDTO> findAll(@RequestParam(defaultValue = "0", required = false) Integer page,
+	public List<UserDTO> findAll(@RequestParam(defaultValue = "0", required = false) Integer page,
 			@RequestParam(defaultValue = "10", required = false) Integer size) {
-		final Set<User> users = userService.findAll(PageRequest.of(page, size));
+		final List<User> users = userService.findAll(PageRequest.of(page, size));
 		return userMapper.modelToDto(users);
 	}
 	
@@ -44,20 +45,25 @@ public class UserController {
 	}
 
 	@RequestMapping(method = RequestMethod.POST)
-	public UserDTO create(@RequestBody UserPostDTO dto) {
+	public UserDTO create(@RequestBody UserDTO dto) throws EmptyFieldException, DuplicatedKeyException {
+		if(dto.getName() == null) throw new EmptyFieldException();
+		if(dto.getEmail() == null) throw new EmptyFieldException();
+		final Optional<User> user1 = userService.findOneByEmail(dto.getEmail());
+		if(user1.isPresent()) throw new DuplicatedKeyException();
 		final User user = userMapper.dtoToModel(dto);
 		final User createUser = userService.create(user);
 		return userMapper.modelToDto(createUser);
 	}
 	
 	@RequestMapping(value = "/{id}",method = RequestMethod.PUT)
-	public void update(@PathVariable Integer id,@RequestBody UserDTO dto) throws NotFoundException {
+	public void update(@PathVariable Integer id,@RequestBody UserDTO dto) throws NotFoundException, DuplicatedKeyException {
 		final Optional<User> user = userService.findById(id);
 		if(!user.isPresent()) throw new NotFoundException();
-		final User user1 = userMapper.dtoToModel(dto);
-		user.get().setName(user1.getName());
-		user.get().setEmail(user1.getEmail());
-		user.get().setPassword(user1.getPassword());
+		final Optional<User> user1 = userService.findOneByEmail(dto.getEmail());
+		if(user1.isPresent()) throw new DuplicatedKeyException();		
+		final User user2 = userMapper.dtoToModel(dto);
+		if (user2.getName() != null) user.get().setName(user2.getName());
+		if (user2.getEmail() != null) user.get().setEmail(user2.getEmail());
 		userService.update(user.get());
 	}
 	
@@ -68,11 +74,7 @@ public class UserController {
 		userService.delete(user.get());
 	}
 	
-//	@ResponseStatus(HttpStatus.NOT_FOUND)
-//	@ExceptionHandler({NotFoundException.class})
-//	public ErrorDTO notfound() {
-//		return new ErrorDTO(NotFoundException.MSG);		
-//	}	
+
 //	log.debug("Para el desarrollador");
 //	log.info("Informacion necesaria");
 //	log.warn("Algo que puede provocar un error");

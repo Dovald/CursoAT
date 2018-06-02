@@ -1,7 +1,7 @@
 package com.dovald.CursoAT.controller;
 
+import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -29,9 +29,9 @@ public class ResultController {
 	ResultMapper resultMapper;
 	
 	@RequestMapping(method = RequestMethod.GET)
-	public Set<ResultDTO> findAll(@RequestParam(defaultValue = "0", required = false) Integer page,
+	public List<ResultDTO> findAll(@RequestParam(defaultValue = "0", required = false) Integer page,
 			@RequestParam(defaultValue = "10", required = false) Integer size) {
-		final Set<Result> results = resultService.findAll(PageRequest.of(page, size));
+		final List<Result> results = resultService.findAll(PageRequest.of(page, size));
 		return resultMapper.modelToDto(results);
 	}
 	

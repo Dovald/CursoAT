@@ -1,7 +1,7 @@
 package com.dovald.CursoAT.controller;
 
+import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.dovald.CursoAT.component.mapper.question.QuestionMapper;
 import com.dovald.CursoAT.dto.QuestionDTO;
+import com.dovald.CursoAT.exception.EmptyFieldException;
 import com.dovald.CursoAT.exception.NotFoundException;
 import com.dovald.CursoAT.model.Question;
 import com.dovald.CursoAT.service.QuestionService;
@@ -29,9 +30,9 @@ public class QuestionController {
 	QuestionMapper questionMapper;
 	
 	@RequestMapping(method = RequestMethod.GET)
-	public Set<QuestionDTO> findAll(@RequestParam(defaultValue = "0", required = false) Integer page,
+	public List<QuestionDTO> findAll(@RequestParam(defaultValue = "0", required = false) Integer page,
 			@RequestParam(defaultValue = "10", required = false) Integer size) {
-		final Set<Question> questions = questionService.findAll(PageRequest.of(page, size));
+		final List<Question> questions = questionService.findAll(PageRequest.of(page, size));
 		return questionMapper.modelToDto(questions);
 	}
 	
@@ -43,7 +44,8 @@ public class QuestionController {
 	}
 
 	@RequestMapping(method = RequestMethod.POST)
-	public QuestionDTO create(@RequestBody QuestionDTO dto) {
+	public QuestionDTO create(@RequestBody QuestionDTO dto) throws EmptyFieldException {
+		if(dto.getText() == null) throw new EmptyFieldException();
 		final Question question = questionMapper.dtoToModel(dto);
 		final Question createQuestion = questionService.create(question);
 		return questionMapper.modelToDto(createQuestion);
@@ -54,7 +56,7 @@ public class QuestionController {
 		final Optional<Question> question = questionService.findById(id);
 		if(!question.isPresent()) throw new NotFoundException();
 		final Question question1 = questionMapper.dtoToModel(dto);
-		question.get().setText(question1.getText());
+		if(question1.getText() != null)question.get().setText(question1.getText());
 		questionService.update(question.get());
 	}
 	

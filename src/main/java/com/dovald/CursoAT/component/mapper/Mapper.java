@@ -1,6 +1,6 @@
 package com.dovald.CursoAT.component.mapper;
 
-import java.util.Set;
+import java.util.List;
 
 public interface Mapper<M, D> {
 
@@ -8,9 +8,9 @@ public interface Mapper<M, D> {
 
 	D modelToDto(M model);
 
-	Set<M> dtoToModel(Set<D> dtos);
+	List<M> dtoToModel(List<D> dtos);
 
-	Set<D> modelToDto(Set<M> models);
+	List<D> modelToDto(List<M> models);
 
 	Class<? extends D> dtoClazz();
 

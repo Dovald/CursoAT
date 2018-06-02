@@ -1,7 +1,7 @@
 package com.dovald.CursoAT.controller;
 
+import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.dovald.CursoAT.component.mapper.tag.TagMapper;
 import com.dovald.CursoAT.dto.TagDTO;
 import com.dovald.CursoAT.exception.DuplicatedKeyException;
+import com.dovald.CursoAT.exception.EmptyFieldException;
 import com.dovald.CursoAT.exception.NotFoundException;
 import com.dovald.CursoAT.model.Tag;
 import com.dovald.CursoAT.service.TagService;
@@ -30,9 +31,9 @@ public class TagController {
 	TagMapper tagMapper;
 	
 	@RequestMapping(method = RequestMethod.GET)
-	public Set<TagDTO> findAll(@RequestParam(defaultValue = "0", required = false) Integer page,
+	public List<TagDTO> findAll(@RequestParam(defaultValue = "0", required = false) Integer page,
 			@RequestParam(defaultValue = "10", required = false) Integer size) {
-		final Set<Tag> tags = tagService.findAll(PageRequest.of(page, size));
+		final List<Tag> tags = tagService.findAll(PageRequest.of(page, size));
 		return tagMapper.modelToDto(tags);
 	}
 	
@@ -44,7 +45,8 @@ public class TagController {
 	}
 
 	@RequestMapping(method = RequestMethod.POST)
-	public TagDTO create(@RequestBody TagDTO dto) throws DuplicatedKeyException {
+	public TagDTO create(@RequestBody TagDTO dto) throws DuplicatedKeyException, EmptyFieldException {
+		if(dto.getName() == null) throw new EmptyFieldException();
 		final Tag tag = tagMapper.dtoToModel(dto);
 		final Optional<Tag> tag1 = tagService.findOneByName(tag.getName());
 		if(tag1.isPresent()) throw new DuplicatedKeyException();
@@ -56,9 +58,10 @@ public class TagController {
 	public void update(@PathVariable Integer id,@RequestBody TagDTO dto) throws NotFoundException, DuplicatedKeyException {
 		final Optional<Tag> tag = tagService.findById(id);
 		if(!tag.isPresent()) throw new NotFoundException();
-		final Tag tag1 = tagMapper.dtoToModel(dto);
-		if(tag1.getName() == tag.get().getName()) throw new DuplicatedKeyException();
-		tag.get().setName(tag1.getName());
+		final Optional<Tag> tag1 = tagService.findOneByName(dto.getName());
+		if(tag1.isPresent()) throw new DuplicatedKeyException();		
+		final Tag tag2 = tagMapper.dtoToModel(dto);
+		if (tag2.getName() != null) tag.get().setName(tag2.getName());
 		tagService.update(tag.get());
 	}
 	

@@ -1,7 +1,7 @@
 package com.dovald.CursoAT.controller;
 
+import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.dovald.CursoAT.component.mapper.course.CourseMapper;
 import com.dovald.CursoAT.dto.CourseDTO;
+import com.dovald.CursoAT.exception.EmptyFieldException;
 import com.dovald.CursoAT.exception.NotFoundException;
 import com.dovald.CursoAT.model.Course;
 import com.dovald.CursoAT.service.CourseService;
@@ -29,9 +30,9 @@ public class CourseController {
 	CourseMapper courseMapper;
 	
 	@RequestMapping(method = RequestMethod.GET)
-	public Set<CourseDTO> findAll(@RequestParam(defaultValue = "0", required = false) Integer page,
+	public List<CourseDTO> findAll(@RequestParam(defaultValue = "0", required = false) Integer page,
 			@RequestParam(defaultValue = "10", required = false) Integer size) {
-		final Set<Course> courses = courseService.findAll(PageRequest.of(page, size));
+		final List<Course> courses = courseService.findAll(PageRequest.of(page, size));
 		return courseMapper.modelToDto(courses);
 	}
 	
@@ -43,7 +44,8 @@ public class CourseController {
 	}
 
 	@RequestMapping(method = RequestMethod.POST)
-	public CourseDTO create(@RequestBody CourseDTO dto) {
+	public CourseDTO create(@RequestBody CourseDTO dto) throws EmptyFieldException {
+		if(dto.getName() == null) throw new EmptyFieldException();
 		final Course course = courseMapper.dtoToModel(dto);
 		final Course createCourse = courseService.create(course);
 		return courseMapper.modelToDto(createCourse);
@@ -54,7 +56,10 @@ public class CourseController {
 		final Optional<Course> course = courseService.findById(id);
 		if(!course.isPresent()) throw new NotFoundException();
 		final Course course1 = courseMapper.dtoToModel(dto);
-		course.get().setName(course1.getName());
+		if (course1.getName() != null) course.get().setName(course1.getName());
+		if (course1.getStart_date() != null) course.get().setStart_date(course1.getStart_date());
+		if (course1.getEnd_date() != null) course.get().setEnd_date(course1.getEnd_date());
+		if (!course1.getUser().isEmpty()) course.get().getUser().addAll(course1.getUser());
 		courseService.update(course.get());
 	}
 	

@@ -1,6 +1,6 @@
 package com.dovald.CursoAT.component.mapper.question;
 
-import java.util.Set;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,12 +43,12 @@ public class QuestionMapperImpl  implements QuestionMapper {
 		return dto;		
 	}
 	
-	public Set<Question> dtoToModel(Set<QuestionDTO> dtos) {
-		return dtos.stream().map(d -> dtoToModel(d)).collect(Collectors.toSet());
+	public List<Question> dtoToModel(List<QuestionDTO> dtos) {
+		return dtos.stream().map(d -> dtoToModel(d)).collect(Collectors.toList());
 	}
 
-	public Set<QuestionDTO> modelToDto(Set<Question> models) {
-		return models.stream().map(m -> modelToDto(m)).collect(Collectors.toSet());
+	public List<QuestionDTO> modelToDto(List<Question> models) {
+		return models.stream().map(m -> modelToDto(m)).collect(Collectors.toList());
 	}
 
 }

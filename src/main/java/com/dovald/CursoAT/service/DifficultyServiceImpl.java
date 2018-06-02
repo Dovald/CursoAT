@@ -1,7 +1,7 @@
 package com.dovald.CursoAT.service;
 
+import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,8 +34,8 @@ public class DifficultyServiceImpl implements DifficultyService {
 	}
 
 	@Override
-	public Set<Difficulty> findAll(Pageable p) {
-		return difficultydao.findAll(PageRequest.of(p.getPageNumber(), p.getPageSize())).stream().collect(Collectors.toSet());
+	public List<Difficulty> findAll(Pageable p) {
+		return difficultydao.findAll(PageRequest.of(p.getPageNumber(), p.getPageSize())).stream().collect(Collectors.toList());
 	}
 
 	@Override
