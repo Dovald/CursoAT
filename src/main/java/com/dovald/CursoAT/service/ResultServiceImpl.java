@@ -17,6 +17,9 @@ public class ResultServiceImpl implements ResultService {
 	
 	@Autowired
 	ResultDAO resultdao;
+	
+	@Autowired
+	TestService testService;
 
 	@Override
 	public Result create(Result t) {
@@ -41,6 +44,11 @@ public class ResultServiceImpl implements ResultService {
 	@Override
 	public void delete(Result t) {
 		resultdao.delete(t);
+	}
+
+	@Override
+	public List<Result> findByTest(Integer idTest, Pageable p) {
+		return resultdao.findByTest(testService.findById(idTest).get(),PageRequest.of(p.getPageNumber(), p.getPageSize())).stream().collect(Collectors.toList());
 	}
 
 }
