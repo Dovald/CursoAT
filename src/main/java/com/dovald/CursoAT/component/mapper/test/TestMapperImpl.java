@@ -20,19 +20,12 @@ public class TestMapperImpl implements TestMapper {
 	
 	@Autowired
 	TagMapper tagMapper;
-
-	@Override
-	public Test dtoToModel(TestDTO dto) {
-		Test model = new Test();
-		model.setName(dto.getName());
-		return model;
-	}
 	
 	@Override
 	public Test dtoToModel(TestPostDTO dto) {
 		Test model = new Test();
 		model.setName(dto.getName());
-		model.setCourse(courseService.findById(dto.getCourse().getId()).get());
+		model.setCourse(courseService.findById(dto.getIdCourse()).get());
 		return model;
 	}
 
@@ -42,12 +35,8 @@ public class TestMapperImpl implements TestMapper {
 		dto.setId(model.getId());
 		dto.setName(model.getName());
 		dto.setCourse(model.getCourse().getName());
+		dto.setIdCourse(model.getCourse().getId());
 		return dto;
-	}
-
-	@Override
-	public List<Test> dtoToModel(List<TestDTO> dtos) {
-		return dtos.stream().map(d -> dtoToModel(d)).collect(Collectors.toList());
 	}
 
 	@Override

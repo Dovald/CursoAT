@@ -1,5 +1,6 @@
 package com.dovald.CursoAT.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,9 +31,12 @@ public class TestController {
 	TestMapper testMapper;
 	
 	@RequestMapping(method = RequestMethod.GET)
-	public List<TestDTO> findAll(@RequestParam(defaultValue = "0", required = false) Integer page,
+	public List<TestDTO> findAll(@RequestParam(required = false) Integer idCourse,
+			@RequestParam(defaultValue = "0", required = false) Integer page,
 			@RequestParam(defaultValue = "10", required = false) Integer size) {
-		final List<Test> tests = testService.findAll(PageRequest.of(page, size));
+		List<Test> tests = new ArrayList<Test>();
+		if(idCourse != null) { tests = testService.findByCourse(idCourse,PageRequest.of(page, size));}
+		if(idCourse == null) { tests = testService.findAll(PageRequest.of(page, size));}
 		return testMapper.modelToDto(tests);
 	}
 	

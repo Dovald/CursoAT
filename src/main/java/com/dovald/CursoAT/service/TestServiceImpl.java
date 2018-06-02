@@ -17,6 +17,9 @@ public class TestServiceImpl implements TestService{
 	
 	@Autowired
 	TestDAO testdao;
+	
+	@Autowired
+	CourseService courseService;
 
 	@Override
 	public Test create(Test t) {
@@ -46,6 +49,11 @@ public class TestServiceImpl implements TestService{
 	@Override
 	public Optional<Test> findOneByName(String name) {
 		return testdao.findOneByName(name);
+	}
+
+	@Override
+	public List<Test> findByCourse(Integer id,Pageable p) {
+		return testdao.findByCourse(courseService.findById(id).get(),PageRequest.of(p.getPageNumber(), p.getPageSize())).stream().collect(Collectors.toList());
 	}
 
 }
