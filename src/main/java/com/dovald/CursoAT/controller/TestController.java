@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.dovald.CursoAT.component.mapper.test.TestMapper;
 import com.dovald.CursoAT.dto.TestDTO;
+import com.dovald.CursoAT.dto.TestGetDTO;
 import com.dovald.CursoAT.dto.TestPostDTO;
 import com.dovald.CursoAT.dto.TestPutDTO;
 import com.dovald.CursoAT.exception.EmptyFieldException;
@@ -43,10 +44,10 @@ public class TestController {
 	}
 	
 	@RequestMapping(value = "/{id}",method = RequestMethod.GET)
-	public TestDTO findById(@PathVariable Integer id) throws NotFoundException {
+	public TestGetDTO findById(@PathVariable Integer id) throws NotFoundException {
 		final Optional<Test> test = testService.findById(id);
 		if(!test.isPresent()) throw new NotFoundException();
-		return testMapper.modelToDto(test.get());
+		return testMapper.modelToGetDto(test.get());
 	}
 
 	@RequestMapping(method = RequestMethod.POST)

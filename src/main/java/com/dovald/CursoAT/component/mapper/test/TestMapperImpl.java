@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 import com.dovald.CursoAT.component.mapper.question.QuestionMapper;
 import com.dovald.CursoAT.component.mapper.tag.TagMapper;
 import com.dovald.CursoAT.dto.TestDTO;
+import com.dovald.CursoAT.dto.TestGetDTO;
 import com.dovald.CursoAT.dto.TestPostDTO;
 import com.dovald.CursoAT.dto.TestPutDTO;
 import com.dovald.CursoAT.model.Test;
@@ -54,6 +55,14 @@ public class TestMapperImpl implements TestMapper {
 		dto.setName(model.getName());
 		dto.setCourse(model.getCourse().getName());
 		dto.setIdCourse(model.getCourse().getId());
+		return dto;
+	}
+	
+	@Override
+	public TestGetDTO modelToGetDto(Test model) {
+		TestGetDTO dto = new TestGetDTO();
+		dto.setId(model.getId());
+		dto.setQuestion(questionMapper.modelToDto(model.getQuestion()));
 		return dto;
 	}
 
