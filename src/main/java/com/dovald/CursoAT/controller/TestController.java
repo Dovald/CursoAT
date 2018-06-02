@@ -51,7 +51,7 @@ public class TestController {
 	}
 	
 	@RequestMapping(value = "/{id}",method = RequestMethod.PUT)
-	public void update(@PathVariable Integer id,@RequestBody TestDTO dto) throws NotFoundException {
+	public void update(@PathVariable Integer id,@RequestBody TestPostDTO dto) throws NotFoundException {
 		final Optional<Test> test = testService.findById(id);
 		if(!test.isPresent()) throw new NotFoundException();
 		final Test test1 = testMapper.dtoToModel(dto);
