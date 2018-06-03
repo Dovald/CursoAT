@@ -30,7 +30,7 @@ public class Result {
 	@Column(nullable = false)
 	private Integer score;
 
-	@Temporal(TemporalType.TIMESTAMP)
+	@Temporal(TemporalType.DATE)
 	private Date date;
 
 	@JoinColumn(name = FIELD_USER)

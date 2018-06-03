@@ -37,13 +37,13 @@ public class AnswerController {
 	}
 	
 	@RequestMapping(value = "/question/{idQuestion}/answer",method = RequestMethod.GET)
-	public List<AnswerDTO> findAll(@PathVariable Integer idQuestion) {
+	public List<AnswerDTO> findAll(@PathVariable Integer idQuestion) throws NotFoundException {
 		final List<Answer> answers = answerService.findByQuestion(idQuestion);
 		return answerMapper.modelToDto(answers);
 	}
 
 	@RequestMapping(value = "/question/{idQuestion}/answer",method = RequestMethod.POST)
-	public List<AnswerPostDTO> create(@PathVariable Integer idQuestion,@RequestBody List<AnswerPostDTO> dtos) throws MaxNumberException, TwoAnswersTrueException, EmptyFieldException{
+	public List<AnswerPostDTO> create(@PathVariable Integer idQuestion,@RequestBody List<AnswerPostDTO> dtos) throws MaxNumberException, TwoAnswersTrueException, EmptyFieldException, NotFoundException{
 		dtos.forEach(m -> m.setIdQuestion(idQuestion));
 		List<Answer> list = answerService.findByQuestion(idQuestion);
 		final List<Answer> answers = answerMapper.dtoPostToModel(dtos);

@@ -11,7 +11,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.dovald.CursoAT.dao.AnswerDAO;
+import com.dovald.CursoAT.exception.NotFoundException;
 import com.dovald.CursoAT.model.Answer;
+import com.dovald.CursoAT.model.Question;
 
 @Service
 public class AnswerServiceImpl implements AnswerService {
@@ -29,7 +31,7 @@ public class AnswerServiceImpl implements AnswerService {
 	
 	@Override
 	public List<Answer> create(List<Answer> answers) {
-		List<Answer> answers1 = new ArrayList<Answer>();
+		final List<Answer> answers1 = new ArrayList<Answer>();
 		answers.forEach(m -> answers1.add(create(m)));
 		return answers1;
 	}
@@ -55,13 +57,10 @@ public class AnswerServiceImpl implements AnswerService {
 	}
 
 	@Override
-	public List<Answer> findByQuestion(Integer idQuestion) {
-		return answerdao.findByQuestion(questionservice.findById(idQuestion).get());
-	}
-
-	@Override
-	public Optional<Answer> findOneByIsCorrect(boolean b) {
-		return answerdao.findOneByIsCorrect(b);
+	public List<Answer> findByQuestion(Integer idQuestion) throws NotFoundException {
+		final Optional<Question> q = questionservice.findById(idQuestion);
+		if(!q.isPresent()) throw new NotFoundException();
+		return answerdao.findByQuestion(q.get());
 	}
 
 }
