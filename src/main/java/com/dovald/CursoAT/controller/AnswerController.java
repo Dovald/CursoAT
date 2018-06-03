@@ -16,12 +16,11 @@ import com.dovald.CursoAT.dto.AnswerPostDTO;
 import com.dovald.CursoAT.exception.EmptyFieldException;
 import com.dovald.CursoAT.exception.MaxNumberException;
 import com.dovald.CursoAT.exception.NotFoundException;
-import com.dovald.CursoAT.exception.QuestionTrueException;
+import com.dovald.CursoAT.exception.TwoAnswersTrueException;
 import com.dovald.CursoAT.model.Answer;
 import com.dovald.CursoAT.service.AnswerService;
 
 @RestController
-@RequestMapping(value = "/question/{idQuestion}/answer")
 public class AnswerController {
 	
 	@Autowired
@@ -30,43 +29,39 @@ public class AnswerController {
 	@Autowired
 	AnswerMapper answerMapper;
 	
-	@RequestMapping(method = RequestMethod.GET)
-	public List<AnswerDTO> findAll(@PathVariable Integer idQuestion) {
-		final List<Answer> answers = answerService.findByQuestion(idQuestion);
-		return answerMapper.modelToDto(answers);
-	}
-	
-	@RequestMapping(value = "/{id}",method = RequestMethod.GET)
+	@RequestMapping(value = "/answer/{id}",method = RequestMethod.GET)
 	public AnswerDTO findById(@PathVariable Integer id) throws NotFoundException {
 		final Optional<Answer> answer = answerService.findById(id);
 		if(!answer.isPresent()) throw new NotFoundException();
 		return answerMapper.modelToDto(answer.get());
 	}
+	
+	@RequestMapping(value = "/question/{idQuestion}/answer",method = RequestMethod.GET)
+	public List<AnswerDTO> findAll(@PathVariable Integer idQuestion) {
+		final List<Answer> answers = answerService.findByQuestion(idQuestion);
+		return answerMapper.modelToDto(answers);
+	}
 
-	@RequestMapping(method = RequestMethod.POST)
-	public AnswerDTO create(@PathVariable Integer idQuestion,@RequestBody AnswerPostDTO dto) throws MaxNumberException, QuestionTrueException, EmptyFieldException{
-		dto.setIdQuestion(idQuestion);
-		if(dto.getText() == null) throw new EmptyFieldException();
-		if(answerService.findByQuestion(idQuestion).size() == 4) throw new MaxNumberException();
-		//if(answerService.findOneByIsCorrect(true).isPresent() && dto.isCorrect) throw new QuestionTrueException();
-		final Answer answer = answerMapper.dtoToModel(dto);
-		final Answer createAnswer = answerService.create(answer);
-		return answerMapper.modelToDto(createAnswer);
+	@RequestMapping(value = "/question/{idQuestion}/answer",method = RequestMethod.POST)
+	public List<AnswerPostDTO> create(@PathVariable Integer idQuestion,@RequestBody List<AnswerPostDTO> dtos) throws MaxNumberException, TwoAnswersTrueException, EmptyFieldException{
+		dtos.forEach(m -> m.setIdQuestion(idQuestion));
+		List<Answer> list = answerService.findByQuestion(idQuestion);
+		final List<Answer> answers = answerMapper.dtoPostToModel(dtos);
+		list.addAll(answers);
+		if(list.size() > 4) throw new MaxNumberException();
+		int flag=0;
+		for(int i=0;i<list.size();i++)
+		{
+			if(list.get(i).getText() == null) throw new EmptyFieldException();
+			if(list.get(i).isCorrect()) flag++;
+			
+		}
+		if(flag > 1) throw new TwoAnswersTrueException();
+		if(flag == 0) throw new TwoAnswersTrueException();
+		return answerMapper.modelToPostDto(answerService.create(answers));
 	}
 	
-	@RequestMapping(value = "/{id}",method = RequestMethod.PUT)
-	public void update(@PathVariable Integer idQuestion,@PathVariable Integer id,@RequestBody AnswerPostDTO dto) throws NotFoundException, QuestionTrueException {
-		dto.setIdQuestion(idQuestion);
-		final Optional<Answer> answer = answerService.findById(id);
-		if(!answer.isPresent()) throw new NotFoundException();
-		//if(answerService.findOneByIsCorrect(true).isPresent() && dto.isCorrect) throw new QuestionTrueException();
-		final Answer answer1 = answerMapper.dtoToModel(dto);
-		if(answer1.getText() != null) answer.get().setText(answer1.getText());
-		if(answer1.isCorrect() != answer.get().isCorrect()) answer.get().setCorrect(answer1.isCorrect());
-		answerService.update(answer.get());
-	}
-	
-	@RequestMapping(value = "/{id}",method = RequestMethod.DELETE)
+	@RequestMapping(value = "/answer/{id}",method = RequestMethod.DELETE)
 	public void delete(@PathVariable Integer id) throws NotFoundException {
 		final Optional<Answer> answer = answerService.findById(id);
 		if(!answer.isPresent()) throw new NotFoundException();

@@ -1,5 +1,6 @@
 package com.dovald.CursoAT.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -24,6 +25,13 @@ public class AnswerServiceImpl implements AnswerService {
 	@Override
 	public Answer create(Answer t) {
 		return answerdao.save(t);
+	}
+	
+	@Override
+	public List<Answer> create(List<Answer> answers) {
+		List<Answer> answers1 = new ArrayList<Answer>();
+		answers.forEach(m -> answers1.add(create(m)));
+		return answers1;
 	}
 
 	@Override

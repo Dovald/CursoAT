@@ -9,5 +9,6 @@ public interface AnswerService extends AbstractCRUDService<Answer, Integer> {
 	
 	List<Answer> findByQuestion(Integer idQuestion);
 	Optional<Answer> findOneByIsCorrect(boolean b);
+	List<Answer> create(List<Answer> answers);
 
 }

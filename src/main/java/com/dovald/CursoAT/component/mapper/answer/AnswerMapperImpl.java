@@ -23,15 +23,6 @@ public class AnswerMapperImpl implements AnswerMapper {
 		model.setText(dto.getText());
 		return model;
 	}
-	
-	@Override
-	public Answer dtoToModel(AnswerPostDTO dto) {
-		Answer model = new Answer();
-		model.setText(dto.getText());
-		model.setCorrect(dto.isCorrect());
-		model.setQuestion(questionservice.findById(dto.getIdQuestion()).get());
-		return model;
-	}
 
 	@Override
 	public AnswerDTO modelToDto(Answer model) {
@@ -40,7 +31,22 @@ public class AnswerMapperImpl implements AnswerMapper {
 		dto.setText(model.getText());
 		return dto;
 	}
+	
+	@Override
+	public AnswerPostDTO modelToPostDto(Answer model) {
+		AnswerPostDTO dto = new AnswerPostDTO();
+		dto.setId(model.getId());
+		dto.setText(model.getText());
+		dto.setCorrect(model.isCorrect());
+		dto.setIdQuestion(model.getQuestion().getId());
+		return dto;
+	}
 
+	@Override
+	public List<Answer> dtoPostToModel(List<AnswerPostDTO> dtos) {
+		return dtos.stream().map(d -> dtoToModel(d)).collect(Collectors.toList());
+	}
+	
 	@Override
 	public List<Answer> dtoToModel(List<AnswerDTO> dtos) {
 		return dtos.stream().map(d -> dtoToModel(d)).collect(Collectors.toList());
@@ -50,5 +56,11 @@ public class AnswerMapperImpl implements AnswerMapper {
 	public List<AnswerDTO> modelToDto(List<Answer> models) {
 		return models.stream().map(m -> modelToDto(m)).collect(Collectors.toList());
 	}
+
+	@Override
+	public List<AnswerPostDTO> modelToPostDto(List<Answer> models) {
+		return models.stream().map(m -> modelToPostDto(m)).collect(Collectors.toList());
+	}
+
 
 }

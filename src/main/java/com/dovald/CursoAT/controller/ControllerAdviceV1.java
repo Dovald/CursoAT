@@ -9,8 +9,9 @@ import com.dovald.CursoAT.dto.ErrorDTO;
 import com.dovald.CursoAT.exception.DuplicatedKeyException;
 import com.dovald.CursoAT.exception.EmptyFieldException;
 import com.dovald.CursoAT.exception.MaxNumberException;
+import com.dovald.CursoAT.exception.NoAnswerTrueException;
 import com.dovald.CursoAT.exception.NotFoundException;
-import com.dovald.CursoAT.exception.QuestionTrueException;
+import com.dovald.CursoAT.exception.TwoAnswersTrueException;
 
 @ControllerAdvice(basePackages = {"com.dovald.CursoAT.controller"})
 public class ControllerAdviceV1 {
@@ -33,8 +34,14 @@ public class ControllerAdviceV1 {
 		return new ResponseEntity<ErrorDTO>(new ErrorDTO(e.getMessage()),HttpStatus.BAD_REQUEST);
 	}
 	
-	@ExceptionHandler(QuestionTrueException.class)
-	public ResponseEntity<ErrorDTO> error(QuestionTrueException e)
+	@ExceptionHandler(TwoAnswersTrueException.class)
+	public ResponseEntity<ErrorDTO> error(TwoAnswersTrueException e)
+	{
+		return new ResponseEntity<ErrorDTO>(new ErrorDTO(e.getMessage()),HttpStatus.BAD_REQUEST);
+	}
+	
+	@ExceptionHandler(NoAnswerTrueException.class)
+	public ResponseEntity<ErrorDTO> error(NoAnswerTrueException e)
 	{
 		return new ResponseEntity<ErrorDTO>(new ErrorDTO(e.getMessage()),HttpStatus.BAD_REQUEST);
 	}
