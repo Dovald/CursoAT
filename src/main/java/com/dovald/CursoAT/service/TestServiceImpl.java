@@ -11,6 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.dovald.CursoAT.dao.TestDAO;
+import com.dovald.CursoAT.model.Question;
 import com.dovald.CursoAT.model.Test;
 
 @Service
@@ -37,6 +38,17 @@ public class TestServiceImpl implements TestService{
 		Optional<Test> test = testdao.findById(id);
 		Collections.shuffle(test.get().getQuestion());
 		test.get().getQuestion().forEach(q -> Collections.shuffle(q.getAnswer()));
+		return test;
+	}
+	
+	@Override
+	public Optional<Test> findById(Integer id, Integer index) {
+		Optional<Test> test = testdao.findById(id);
+		test.get().getQuestion().forEach(q -> Collections.shuffle(q.getAnswer()));
+		Question q = new Question();
+		q = test.get().getQuestion().get(index);
+		test.get().getQuestion().clear();
+		test.get().getQuestion().add(q);
 		return test;
 	}
 

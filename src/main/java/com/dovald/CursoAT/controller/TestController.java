@@ -49,6 +49,14 @@ public class TestController {
 		if(!test.isPresent()) throw new NotFoundException();
 		return testMapper.modelToGetDto(test.get());
 	}
+	
+	@RequestMapping(value = "/{id}/OneforOne",method = RequestMethod.GET)
+	public TestGetDTO findById(@PathVariable Integer id,
+			@RequestParam(required = true) Integer index) throws NotFoundException {
+		final Optional<Test> test = testService.findById(id,index);
+		if(!test.isPresent()) throw new NotFoundException();
+		return testMapper.modelToGetDto(test.get());
+	}
 
 	@RequestMapping(method = RequestMethod.POST)
 	public TestDTO create(@RequestBody TestPostDTO dto) throws EmptyFieldException {
