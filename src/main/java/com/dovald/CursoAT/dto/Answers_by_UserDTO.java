@@ -9,10 +9,11 @@ public class Answers_by_UserDTO {
 	
 	private Integer id;
 	private String question;
-	private AnswerDTO answer;
+	private String answer;
 	private Date date;
 	private Integer idUser;
 	private Integer idTest;
-	private boolean isCorrect;
+	private Integer idAnswer;
+	private Integer idQuestion;
 
 }

@@ -31,7 +31,7 @@ public class Answers_by_User {
 	private boolean isCorrect;
 
 	@Column(nullable = false)
-	@Temporal(TemporalType.TIMESTAMP)
+	@Temporal(TemporalType.DATE)
 	private Date date;
 
 	@Column(nullable = false)
@@ -39,5 +39,11 @@ public class Answers_by_User {
 	
 	@Column(nullable = false)
 	private Integer idTest;
+	
+	@Column(nullable = false)
+	private Integer idAnswer;
+	
+	@Column(nullable = false)
+	private Integer idQuestion;
 
 }
