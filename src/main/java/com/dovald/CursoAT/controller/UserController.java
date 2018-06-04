@@ -73,12 +73,4 @@ public class UserController {
 		if(!user.isPresent()) throw new NotFoundException();
 		userService.delete(user.get());
 	}
-	
-
-//	log.debug("Para el desarrollador");
-//	log.info("Informacion necesaria");
-//	log.warn("Algo que puede provocar un error");
-//	log.error("Excepciones controladas");
-//  @Slf4j
-
 }
