@@ -12,4 +12,6 @@ public interface TestService extends AbstractCRUDService<Test, Integer> {
 	List<Test> findByCourse(Integer id,Pageable p);
 
 	Optional<Test> findById(Integer id, Integer index);
+	
+	Optional<Test> findByID(Integer id);
 }

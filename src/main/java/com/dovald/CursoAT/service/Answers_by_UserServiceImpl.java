@@ -17,7 +17,9 @@ import com.dovald.CursoAT.exception.EmptyFieldException;
 import com.dovald.CursoAT.exception.NotEnoughFieldsException;
 import com.dovald.CursoAT.exception.NotFoundException;
 import com.dovald.CursoAT.exception.TooManyFieldsException;
+import com.dovald.CursoAT.model.Answer;
 import com.dovald.CursoAT.model.Answers_by_User;
+import com.dovald.CursoAT.model.Question;
 import com.dovald.CursoAT.model.Result;
 
 @Service
@@ -51,6 +53,9 @@ public class Answers_by_UserServiceImpl implements Answers_by_UserService {
 		if(answers.size() < 10) throw new NotEnoughFieldsException();
 		final Integer idUser = answers.get(0).getIdUser();
 		final Integer idTest = answers.get(0).getIdTest();
+		if(!testService.findByID(idTest).isPresent()) throw new NotFoundException();
+		final List<Question> Questions = testService.findByID(idTest).get().getQuestion();
+		final List<Answer> AnswersR = new ArrayList<Answer>();
 		
 		for(int i=0;i<answers.size();i++)
 		{
@@ -70,9 +75,14 @@ public class Answers_by_UserServiceImpl implements Answers_by_UserService {
 			idAnswers.add(answers.get(i).getIdAnswer());
 			
 			if(!answerService.findById(answers.get(i).getIdAnswer()).isPresent()) throw new NotFoundException();
-			if(!testService.findById(answers.get(i).getIdTest()).isPresent()) throw new NotFoundException();
+			if(!testService.findByID(answers.get(i).getIdTest()).isPresent()) throw new NotFoundException();
 			if(!userService.findById(answers.get(i).getIdUser()).isPresent()) throw new NotFoundException();
 			if(!questionService.findById(answers.get(i).getIdQuestion()).isPresent()) throw new NotFoundException();
+			
+			if(!Questions.contains(questionService.findById(answers.get(i).getIdQuestion()).get())) throw new BadFieldsException();
+			AnswersR.clear();
+			AnswersR.addAll(questionService.findById(answers.get(i).getIdQuestion()).get().getAnswer());
+			if(!AnswersR.contains(answerService.findById(answers.get(i).getIdAnswer()).get())) throw new BadFieldsException();
 			
 			answers.get(i).setCorrect(answerService.findById(answers.get(i).getIdAnswer()).get().isCorrect());			
 		}

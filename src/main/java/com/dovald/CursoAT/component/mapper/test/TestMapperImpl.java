@@ -1,6 +1,7 @@
 package com.dovald.CursoAT.component.mapper.test;
 
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,13 +48,18 @@ public class TestMapperImpl implements TestMapper {
 	@Override
 	public Test dtoToModel(TestPutDTO dto) throws NotFoundException {
 		Test model = new Test();
+		AtomicInteger a = new AtomicInteger();
 		model.setName(dto.getName());
 		if(dto.getIdCourse()!= null && courseService.findById(dto.getIdCourse()).isPresent())
 			model.setCourse(courseService.findById(dto.getIdCourse()).get());
 		else {
 			if(dto.getIdCourse()!= null)
 			throw new NotFoundException();}
-		if(dto.getQuestion() != null)model.setQuestion(dto.getQuestion().stream().map(m -> questionService.findById(m.getId()).get() ).collect(Collectors.toList()));
+		if(dto.getQuestion() != null) {
+			dto.getQuestion().forEach(m -> {if(!questionService.findById(m.getId()).isPresent()) a.incrementAndGet();});
+			if(a.get()>0) throw new NotFoundException();
+			model.setQuestion(dto.getQuestion().stream().map(m -> questionService.findById(m.getId()).get() ).collect(Collectors.toList()));
+		}
 		return model;
 	}
 

@@ -70,4 +70,9 @@ public class TestServiceImpl implements TestService{
 		return testdao.findByCourse(courseService.findById(id).get(),PageRequest.of(p.getPageNumber(), p.getPageSize())).stream().collect(Collectors.toList());
 	}
 
+	@Override
+	public Optional<Test> findByID(Integer id) {
+		return testdao.findById(id);
+	}
+
 }

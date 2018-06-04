@@ -31,9 +31,11 @@ public class Course {
 	@Column(nullable = false)
 	private String name;
 	
+	@Column(nullable = false)
 	@Temporal(TemporalType.DATE)
 	private Date start_date;
 	
+	@Column(nullable = false)
 	@Temporal(TemporalType.DATE)
 	private Date end_date;
 	

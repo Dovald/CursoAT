@@ -47,6 +47,8 @@ public class CourseController {
 	@RequestMapping(method = RequestMethod.POST)
 	public CourseDTO create(@RequestBody CourseDTO dto) throws EmptyFieldException, DateException {
 		if(dto.getName() == null) throw new EmptyFieldException();
+		if(dto.getStart_date() == null) throw new EmptyFieldException();
+		if(dto.getEnd_date() == null) throw new EmptyFieldException();
 		if(dto.getStart_date().after(dto.getEnd_date())) throw new DateException();
 		final Course course = courseMapper.dtoToModel(dto);
 		final Course createCourse = courseService.create(course);
