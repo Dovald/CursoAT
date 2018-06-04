@@ -36,8 +36,11 @@ public class TestServiceImpl implements TestService{
 	@Override
 	public Optional<Test> findById(Integer id) {
 		Optional<Test> test = testdao.findById(id);
-		Collections.shuffle(test.get().getQuestion());
-		test.get().getQuestion().forEach(q -> Collections.shuffle(q.getAnswer()));
+		if(test.get().getQuestion() != null) 
+		{
+			Collections.shuffle(test.get().getQuestion());
+			test.get().getQuestion().forEach(q -> Collections.shuffle(q.getAnswer()));
+		}
 		return test;
 	}
 	

@@ -42,4 +42,8 @@ public class Course {
 	
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = Test.FIELD_COURSE)
 	private List<Test> test;
+	
+	public String toString() {
+		return this.getName();
+	}
 }

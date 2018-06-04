@@ -8,12 +8,14 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import com.dovald.CursoAT.dto.ErrorDTO;
 import com.dovald.CursoAT.exception.BadAnswersException;
 import com.dovald.CursoAT.exception.BadFieldsException;
+import com.dovald.CursoAT.exception.DateException;
 import com.dovald.CursoAT.exception.DuplicatedKeyException;
 import com.dovald.CursoAT.exception.EmptyFieldException;
 import com.dovald.CursoAT.exception.MaxNumberException;
 import com.dovald.CursoAT.exception.NoAnswerTrueException;
 import com.dovald.CursoAT.exception.NotEnoughFieldsException;
 import com.dovald.CursoAT.exception.NotFoundException;
+import com.dovald.CursoAT.exception.RepeatQuestionsException;
 import com.dovald.CursoAT.exception.TooManyFieldsException;
 import com.dovald.CursoAT.exception.TwoAnswersTrueException;
 
@@ -76,6 +78,18 @@ public class ControllerAdviceV1 {
 	
 	@ExceptionHandler(NotEnoughFieldsException.class)
 	public ResponseEntity<ErrorDTO> error(NotEnoughFieldsException e)
+	{
+		return new ResponseEntity<ErrorDTO>(new ErrorDTO(e.getMessage()),HttpStatus.BAD_REQUEST);
+	}
+	
+	@ExceptionHandler(DateException.class)
+	public ResponseEntity<ErrorDTO> error(DateException e)
+	{
+		return new ResponseEntity<ErrorDTO>(new ErrorDTO(e.getMessage()),HttpStatus.BAD_REQUEST);
+	}
+	
+	@ExceptionHandler(RepeatQuestionsException.class)
+	public ResponseEntity<ErrorDTO> error(RepeatQuestionsException e)
 	{
 		return new ResponseEntity<ErrorDTO>(new ErrorDTO(e.getMessage()),HttpStatus.BAD_REQUEST);
 	}

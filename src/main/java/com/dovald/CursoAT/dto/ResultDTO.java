@@ -11,4 +11,5 @@ public class ResultDTO {
 	private Integer score;
 	private Date date;
 	private UserDTO user;
+	private TestDTO test;
 }

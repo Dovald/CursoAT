@@ -12,6 +12,7 @@ import com.dovald.CursoAT.dto.TestDTO;
 import com.dovald.CursoAT.dto.TestGetDTO;
 import com.dovald.CursoAT.dto.TestPostDTO;
 import com.dovald.CursoAT.dto.TestPutDTO;
+import com.dovald.CursoAT.exception.NotFoundException;
 import com.dovald.CursoAT.model.Test;
 import com.dovald.CursoAT.service.CourseService;
 import com.dovald.CursoAT.service.QuestionService;
@@ -32,19 +33,27 @@ public class TestMapperImpl implements TestMapper {
 	QuestionMapper questionMapper;
 	
 	@Override
-	public Test dtoToModel(TestPostDTO dto) {
+	public Test dtoToModel(TestPostDTO dto) throws NotFoundException {
 		Test model = new Test();
 		model.setName(dto.getName());
-		model.setCourse(courseService.findById(dto.getIdCourse()).get());
+		if(dto.getIdCourse() != null)
+			if(courseService.findById(dto.getIdCourse()).isPresent())
+				model.setCourse(courseService.findById(dto.getIdCourse()).get());
+			else
+				throw new NotFoundException();
 		return model;
 	}
 	
 	@Override
-	public Test dtoToModel(TestPutDTO dto) {
+	public Test dtoToModel(TestPutDTO dto) throws NotFoundException {
 		Test model = new Test();
 		model.setName(dto.getName());
-		model.setCourse(courseService.findById(dto.getIdCourse()).get());
-		model.setQuestion(dto.getQuestion().stream().map(m -> questionService.findById(m.getId()).get() ).collect(Collectors.toList()));
+		if(dto.getIdCourse()!= null && courseService.findById(dto.getIdCourse()).isPresent())
+			model.setCourse(courseService.findById(dto.getIdCourse()).get());
+		else {
+			if(dto.getIdCourse()!= null)
+			throw new NotFoundException();}
+		if(dto.getQuestion() != null)model.setQuestion(dto.getQuestion().stream().map(m -> questionService.findById(m.getId()).get() ).collect(Collectors.toList()));
 		return model;
 	}
 
@@ -53,8 +62,8 @@ public class TestMapperImpl implements TestMapper {
 		TestDTO dto = new TestDTO();
 		dto.setId(model.getId());
 		dto.setName(model.getName());
-		dto.setCourse(model.getCourse().getName());
-		dto.setIdCourse(model.getCourse().getId());
+		if(model.getCourse() != null)dto.setCourse(model.getCourse().getName());
+		if(model.getCourse() != null)dto.setIdCourse(model.getCourse().getId());
 		return dto;
 	}
 	

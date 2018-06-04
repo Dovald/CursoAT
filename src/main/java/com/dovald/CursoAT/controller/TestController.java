@@ -3,6 +3,7 @@ package com.dovald.CursoAT.controller;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -20,6 +21,8 @@ import com.dovald.CursoAT.dto.TestPostDTO;
 import com.dovald.CursoAT.dto.TestPutDTO;
 import com.dovald.CursoAT.exception.EmptyFieldException;
 import com.dovald.CursoAT.exception.NotFoundException;
+import com.dovald.CursoAT.exception.RepeatQuestionsException;
+import com.dovald.CursoAT.exception.TooManyFieldsException;
 import com.dovald.CursoAT.model.Test;
 import com.dovald.CursoAT.service.TestService;
 
@@ -59,7 +62,7 @@ public class TestController {
 	}
 
 	@RequestMapping(method = RequestMethod.POST)
-	public TestDTO create(@RequestBody TestPostDTO dto) throws EmptyFieldException {
+	public TestDTO create(@RequestBody TestPostDTO dto) throws EmptyFieldException, NotFoundException {
 		if(dto.getName() == null) throw new EmptyFieldException();
 		final Test test = testMapper.dtoToModel(dto);
 		final Test createTest = testService.create(test);
@@ -67,13 +70,17 @@ public class TestController {
 	}
 	
 	@RequestMapping(value = "/{id}",method = RequestMethod.PUT)
-	public void update(@PathVariable Integer id,@RequestBody TestPutDTO dto) throws NotFoundException {
+	public void update(@PathVariable Integer id,@RequestBody TestPutDTO dto) throws NotFoundException, TooManyFieldsException, RepeatQuestionsException {
 		final Optional<Test> test = testService.findById(id);
 		if(!test.isPresent()) throw new NotFoundException();
 		final Test test1 = testMapper.dtoToModel(dto);
+		final AtomicInteger d = new AtomicInteger();
 		if(test1.getName() != null) test.get().setName(test1.getName());
 		if(test1.getCourse() != null) test.get().setCourse(test1.getCourse());
-		if(!test1.getQuestion().isEmpty()) test.get().getQuestion().addAll(test1.getQuestion());
+		if(test1.getQuestion() != null) test.get().getQuestion().addAll(test1.getQuestion());
+		if(test1.getQuestion() != null && test.get().getQuestion().size() > 10) throw new TooManyFieldsException();
+		if(test1.getQuestion() != null) test.get().getQuestion().forEach(m -> {if(test.get().getQuestion().indexOf(m) != test.get().getQuestion().lastIndexOf(m))d.incrementAndGet();});
+		if(d.get()>0) throw new RepeatQuestionsException();
 		testService.update(test.get());
 	}
 	
