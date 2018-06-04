@@ -45,15 +45,20 @@ public class QuestionController {
 	}
 
 	@RequestMapping(method = RequestMethod.POST)
-	public QuestionPostDTO create(@RequestBody QuestionPostDTO dto) throws EmptyFieldException {
+	public QuestionPostDTO create(@RequestBody QuestionPostDTO dto) throws EmptyFieldException, NotFoundException {
 		if(dto.getText() == null) throw new EmptyFieldException();
+		if(dto.getTag().getId() == null) throw new EmptyFieldException();
+		if(dto.getDifficulty().getId() == null) throw new EmptyFieldException();
 		final Question question = questionMapper.dtoToModel(dto);
 		final Question createQuestion = questionService.create(question);
 		return questionMapper.modelToDtoPost(createQuestion);
 	}
 	
 	@RequestMapping(value = "/{id}",method = RequestMethod.PUT)
-	public void update(@PathVariable Integer id,@RequestBody QuestionPostDTO dto) throws NotFoundException {
+	public void update(@PathVariable Integer id,@RequestBody QuestionPostDTO dto) throws EmptyFieldException, NotFoundException {
+		if(dto.getText() == null) throw new EmptyFieldException();
+		if(dto.getTag().getId() == null) throw new EmptyFieldException();
+		if(dto.getDifficulty().getId() == null) throw new EmptyFieldException();
 		final Optional<Question> question = questionService.findById(id);
 		if(!question.isPresent()) throw new NotFoundException();
 		final Question question1 = questionMapper.dtoToModel(dto);
