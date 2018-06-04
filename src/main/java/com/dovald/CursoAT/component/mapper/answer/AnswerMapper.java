@@ -9,6 +9,7 @@ import com.dovald.CursoAT.model.Answer;
 public interface AnswerMapper {
 	
 	public Answer dtoToModel(AnswerDTO dto);
+	public Answer dtoPostToModel(AnswerPostDTO dto);
 	public AnswerDTO modelToDto(Answer model);
 	public AnswerPostDTO modelToPostDto(Answer model);
 	public List<AnswerDTO> modelToDto(List<Answer> models);

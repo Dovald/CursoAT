@@ -15,7 +15,7 @@ import com.dovald.CursoAT.service.QuestionService;
 public class AnswerMapperImpl implements AnswerMapper {
 	
 	@Autowired
-	QuestionService questionservice;
+	QuestionService questionService;
 
 	@Override
 	public Answer dtoToModel(AnswerDTO dto) {
@@ -23,7 +23,16 @@ public class AnswerMapperImpl implements AnswerMapper {
 		model.setText(dto.getText());
 		return model;
 	}
-
+	
+	@Override
+	public Answer dtoPostToModel(AnswerPostDTO dto) {
+		Answer model = new Answer();
+		model.setText(dto.getText());
+		model.setCorrect(dto.isCorrect());
+		model.setQuestion(questionService.findById(dto.getIdQuestion()).get());
+		return model;
+	}
+	
 	@Override
 	public AnswerDTO modelToDto(Answer model) {
 		AnswerDTO dto = new AnswerDTO();
@@ -44,7 +53,7 @@ public class AnswerMapperImpl implements AnswerMapper {
 
 	@Override
 	public List<Answer> dtoPostToModel(List<AnswerPostDTO> dtos) {
-		return dtos.stream().map(d -> dtoToModel(d)).collect(Collectors.toList());
+		return dtos.stream().map(d -> dtoPostToModel(d)).collect(Collectors.toList());
 	}
 	
 	@Override
@@ -61,6 +70,4 @@ public class AnswerMapperImpl implements AnswerMapper {
 	public List<AnswerPostDTO> modelToPostDto(List<Answer> models) {
 		return models.stream().map(m -> modelToPostDto(m)).collect(Collectors.toList());
 	}
-
-
 }

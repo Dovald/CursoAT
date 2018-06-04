@@ -15,6 +15,7 @@ import com.dovald.CursoAT.dto.AnswerDTO;
 import com.dovald.CursoAT.dto.AnswerPostDTO;
 import com.dovald.CursoAT.exception.EmptyFieldException;
 import com.dovald.CursoAT.exception.MaxNumberException;
+import com.dovald.CursoAT.exception.NoAnswerTrueException;
 import com.dovald.CursoAT.exception.NotFoundException;
 import com.dovald.CursoAT.exception.TwoAnswersTrueException;
 import com.dovald.CursoAT.model.Answer;
@@ -43,7 +44,7 @@ public class AnswerController {
 	}
 
 	@RequestMapping(value = "/question/{idQuestion}/answer",method = RequestMethod.POST)
-	public List<AnswerPostDTO> create(@PathVariable Integer idQuestion,@RequestBody List<AnswerPostDTO> dtos) throws MaxNumberException, TwoAnswersTrueException, EmptyFieldException, NotFoundException{
+	public List<AnswerPostDTO> create(@PathVariable Integer idQuestion,@RequestBody List<AnswerPostDTO> dtos) throws MaxNumberException, TwoAnswersTrueException, EmptyFieldException, NotFoundException, NoAnswerTrueException{
 		dtos.forEach(m -> m.setIdQuestion(idQuestion));
 		List<Answer> list = answerService.findByQuestion(idQuestion);
 		final List<Answer> answers = answerMapper.dtoPostToModel(dtos);
@@ -57,7 +58,7 @@ public class AnswerController {
 			
 		}
 		if(flag > 1) throw new TwoAnswersTrueException();
-		if(flag == 0) throw new TwoAnswersTrueException();
+		if(flag == 0 && list.size() == 4) throw new NoAnswerTrueException();
 		return answerMapper.modelToPostDto(answerService.create(answers));
 	}
 	
